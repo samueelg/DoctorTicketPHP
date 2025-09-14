@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('tipo', ['analista', 'admin']);
             $table->timestamps();
         });
+    }
 
     /**
      * Reverse the migrations.
@@ -28,4 +29,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('users');
     }
+
 };
