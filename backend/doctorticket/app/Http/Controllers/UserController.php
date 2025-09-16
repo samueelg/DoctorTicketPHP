@@ -14,15 +14,15 @@ class UserController extends Controller
     {
         $users = User::all();
 
-        return view('users_list', ['users' => $users]);
+        return view('User.users_list', ['users' => $users]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createUser()
     {
-        //
+        return view('User.create_user');
     }
 
     /**
@@ -30,7 +30,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required',
+            'ramal' => 'required',
+            'senha' => 'required|min: 8',
+            'tipo' => 'required'
+        ],
+        [
+            'nome.required'  => 'É necessário preencher o campo nome',
+            'ramal.required' => 'É necessário preencher o campo ramal',
+            'senha.required' => 'É necessário preencher o campo senha',
+            'senha.min'      => 'A senha deve ter no mínimo 8 caractéres',
+            'tipo.required'  => 'É necessário escolher o tipo de usuário'
+        ]);
+
+        $user = new User();
+        $user->nome = $request->nome;
+        $user->ramal = $request->ramal;
+        $user->senha = $request->senha;
+        $user->tipo = $request->tipo;
+        $user->save();
+        
+        return redirect()->route('usersList');
     }
 
     /**
