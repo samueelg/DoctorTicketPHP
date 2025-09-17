@@ -57,7 +57,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Analista $analista)
+    public function show(User $user)
     {
         //
     }
@@ -65,23 +65,47 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Analista $analista)
-    {
-        //
+    public function edit(User $user)
+    {   
+        if($user->id == null){
+            return redirect()->route('usersList');
+        }
+
+        return view('User.edit_user', ['user' => $user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Analista $analista)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'nome' => 'required',
+            'ramal' => 'required',
+            'senha' => 'required|min: 8',
+            'tipo' => 'required'
+        ],
+        [
+            'nome.required'  => 'É necessário preencher o campo nome',
+            'ramal.required' => 'É necessário preencher o campo ramal',
+            'senha.required' => 'É necessário preencher o campo senha',
+            'senha.min'      => 'A senha deve ter no mínimo 8 caractéres',
+            'tipo.required'  => 'É necessário escolher o tipo de usuário'
+        ]);
+
+        $user->nome  = $request->nome;
+        $user->ramal = $request->ramal;
+        $user->senha = $request->senha;
+        $user->tipo  = $request->tipo;
+        $user->save();
+
+        return redirect()->route('usersList');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Analista $analista)
+    public function destroy(User $user)
     {
         //
     }

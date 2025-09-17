@@ -30,8 +30,7 @@
                             <td>{{ $user->tipo }}</td>
                             <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
-                                <a href="" class="btn btn-info btn-sm">Ver</a>
-                                <a href="" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="{{ route('editUser', $user) }}" class="btn btn-warning btn-sm">Editar</a>
                                 <form action="" method="POST" class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-danger btn-sm"
