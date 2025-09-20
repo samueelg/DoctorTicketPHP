@@ -1,5 +1,6 @@
 @extends('layout.main_layout')
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/users.css') }}">
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Lista de Usuários</h4>
@@ -31,13 +32,10 @@
                             <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
                             <td class="text-center">
                                 <a href="{{ route('editUser', $user) }}" class="btn btn-warning btn-sm">Editar</a>
-                                <form action="" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Tem certeza que deseja excluir este usuário?')">
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#meuModal" id="deleteUser">
                                         Excluir
-                                    </button>
-                                </form>
+                                </button>
+                                @include('modals')
                             </td>
                         </tr>
                     @empty

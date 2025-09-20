@@ -18,7 +18,6 @@
                                     <input class="form-check-input" type="radio" value="analista" name="tipo" id="analista" checked>
                                 @else
                                     <input class="form-check-input" type="radio" value="analista" name="tipo" id="analista">
-                                
                                 @endif
                                 <label class="form-check-label" for="analista">Analista</label>
                             </div>
