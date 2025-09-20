@@ -32,13 +32,14 @@ class UserController extends Controller
     {
         $request->validate([
             'nome' => 'required',
-            'ramal' => 'required',
-            'senha' => 'required|min: 8',
+            'ramal' => 'required|unique:users,ramal',
+            'senha' => 'required|min:8',
             'tipo' => 'required'
         ],
         [
             'nome.required'  => 'É necessário preencher o campo nome',
             'ramal.required' => 'É necessário preencher o campo ramal',
+            'ramal.unique'   => 'Este ramal já esta sendo utilizado',
             'senha.required' => 'É necessário preencher o campo senha',
             'senha.min'      => 'A senha deve ter no mínimo 8 caractéres',
             'tipo.required'  => 'É necessário escolher o tipo de usuário'
@@ -51,7 +52,9 @@ class UserController extends Controller
         $user->tipo = $request->tipo;
         $user->save();
         
-        return redirect()->route('usersList');
+        return redirect()
+            ->route('usersList')
+            ->with('success', 'Usuário criado com sucesso!');
     }
 
     /**
@@ -68,7 +71,9 @@ class UserController extends Controller
     public function edit(User $user)
     {   
         if($user->id == null){
-            return redirect()->route('usersList');
+            return redirect()
+            ->route('usersList')
+            ->with('error', 'ID Usuário não encontrado');
         }
 
         return view('User.edit_user', ['user' => $user]);
@@ -87,7 +92,6 @@ class UserController extends Controller
         ],
         [
             'nome.required'  => 'É necessário preencher o campo nome',
-            'ramal.required' => 'É necessário preencher o campo ramal',
             'senha.required' => 'É necessário preencher o campo senha',
             'senha.min'      => 'A senha deve ter no mínimo 8 caractéres',
             'tipo.required'  => 'É necessário escolher o tipo de usuário'
@@ -99,7 +103,9 @@ class UserController extends Controller
         $user->tipo  = $request->tipo;
         $user->save();
 
-        return redirect()->route('usersList');
+        return redirect()
+            ->route('usersList')
+            ->with('success', 'Usuário editado com sucesso!');
     }
 
     /**
@@ -107,6 +113,14 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if(!$user){
+            return redirect()
+                ->route('usersList')
+                ->with('error', 'Usuário não encontrado.');
+        }
+        $user->delete();
+        return redirect()
+            ->route('usersList')
+            ->with('success', 'Usuário deletado com sucesso');
     }
 }

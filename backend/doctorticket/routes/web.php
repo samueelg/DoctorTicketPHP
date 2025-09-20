@@ -8,3 +8,4 @@ Route::get('/create', [UserController::class, 'createUser'])->name('createUser')
 Route::post('/createUser', [UserController::class, 'store'])->name('createUserSubmit');
 Route::get('/edit/{user}', [UserController::class, 'edit'])->name('editUser');
 Route::post('/edit/{user}', [UserController::class, 'update'])->name('editUserSubmit');
+Route::delete('/delete/{user}', [UserController::class, 'destroy'])->name('deleteUserSubmit');
