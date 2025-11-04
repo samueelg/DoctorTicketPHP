@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsuarioController;
 
-Route::get('/', [UserController::class, 'index'])->name('usersList');
-Route::get('/create', [UserController::class, 'createUser'])->name('createUser');
-Route::post('/createUser', [UserController::class, 'store'])->name('createUserSubmit');
-Route::get('/edit/{user}', [UserController::class, 'edit'])->name('editUser');
-Route::post('/edit/{user}', [UserController::class, 'update'])->name('editUserSubmit');
-Route::delete('/delete/{user}', [UserController::class, 'destroy'])->name('deleteUserSubmit');
+Route::get('/', [UsuarioController::class, 'getUsuariosView'])->name('usersList');
+Route::get('/create', [UsuarioController::class, 'getCreateUserView'])->name('createUser');
+Route::post('/createUser', [UsuarioController::class, 'saveUsuario'])->name('createUserSubmit');
+Route::get('/edit/{user}', [UsuarioController::class, 'getEditView'])->name('editUser');
+Route::post('/edit/{user}', [UsuarioController::class, 'editUsuario'])->name('editUserSubmit');
+Route::delete('/delete/{user}', [UsuarioController::class, 'removeUsuario'])->name('deleteUserSubmit');

@@ -19,6 +19,7 @@
                             <th>Ramal</th>
                             <th>Tipo</th>
                             <th>Criado em</th>
+                            <th>Atualizado em</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -28,8 +29,12 @@
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->nome }}</td>
                                 <td>{{ $user->ramal }}</td>
-                                <td>{{ $user->tipo }}</td>
+                                <td>{{ strtoupper($user->tipo) }}</td>
                                 <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
+                                @if($user->updated_at != $user->created_at)
+                                <td> {{$user->updated_at->format('d/m/Y H:i')}}</td>
+                                @else <td></td>
+                                @endif
                                 <td class="text-center">
                                     <a href="{{ route('editUser', $user) }}" class="btn btn-warning btn-sm">Editar</a>
 

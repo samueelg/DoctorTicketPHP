@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UsuarioController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getUsuariosView()
     {
         $users = User::all();
 
@@ -20,7 +20,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function createUser()
+    public function getCreateUserView()
     {
         return view('User.create_user');
     }
@@ -28,7 +28,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function saveUsuario(Request $request)
     {
         $request->validate([
             'nome' => 'required',
@@ -68,7 +68,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function getEditView(User $user)
     {   
         if($user->id == null){
             return redirect()
@@ -82,7 +82,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function editUsuario(Request $request, User $user)
     {
         $request->validate([
             'nome' => 'required',
@@ -111,7 +111,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function removeUsuario(User $user)
     {
         if(!$user){
             return redirect()
