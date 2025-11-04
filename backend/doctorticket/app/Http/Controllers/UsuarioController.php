@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
@@ -12,7 +12,7 @@ class UsuarioController extends Controller
      */
     public function getUsuariosView()
     {
-        $users = User::all();
+        $users = Usuario::all();
 
         return view('User.users_list', ['users' => $users]);
     }
@@ -30,6 +30,7 @@ class UsuarioController extends Controller
      */
     public function saveUsuario(Request $request)
     {
+        //Método validate para verificar os dados da request
         $request->validate([
             'nome' => 'required',
             'ramal' => 'required|unique:users,ramal',
@@ -60,7 +61,7 @@ class UsuarioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Usuario $user)
     {
         //
     }
@@ -82,7 +83,7 @@ class UsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function editUsuario(Request $request, User $user)
+    public function editUsuario(Request $request, Usuario $user)
     {
         $request->validate([
             'nome' => 'required',
@@ -111,7 +112,7 @@ class UsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function removeUsuario(User $user)
+    public function removeUsuario(Usuario $user)
     {
         if(!$user){
             return redirect()
