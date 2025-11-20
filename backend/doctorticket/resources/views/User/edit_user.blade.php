@@ -72,6 +72,18 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="mb-3">
+                            <div class="row">
+                                <span>Status:</span>
+                                <div>
+                                    <input type="radio" class="btn-check" name="status" value="ativo" id="success-outlined" autocomplete="off" checked>
+                                    <label class="btn btn-outline-success" for="success-outlined">Ativo</label>
+        
+                                    <input type="radio" class="btn-check" name="status" value="inativo" id="danger-outlined" autocomplete="off">
+                                    <label class="btn btn-outline-danger" for="danger-outlined">Inativo</label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">
                                 Enviar

@@ -33,7 +33,7 @@ class UsuarioController extends Controller
         //Método validate para verificar os dados da request
         $request->validate([
             'nome' => 'required',
-            'ramal' => 'required|unique:users,ramal',
+            'ramal' => 'required|unique:usuarios,ramal',
             'senha' => 'required|min:8',
             'tipo' => 'required'
         ],
@@ -46,7 +46,7 @@ class UsuarioController extends Controller
             'tipo.required'  => 'É necessário escolher o tipo de usuário'
         ]);
 
-        $user = new User();
+        $user = new Usuario();
         $user->nome = $request->nome;
         $user->ramal = $request->ramal;
         $user->senha = $request->senha;
@@ -69,7 +69,7 @@ class UsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function getEditView(User $user)
+    public function getEditView(Usuario $user)
     {   
         if($user->id == null){
             return redirect()
@@ -89,19 +89,20 @@ class UsuarioController extends Controller
             'nome' => 'required',
             'ramal' => 'required',
             'senha' => 'required|min: 8',
-            'tipo' => 'required'
+            'tipo' => 'required',
         ],
         [
             'nome.required'  => 'É necessário preencher o campo nome',
             'senha.required' => 'É necessário preencher o campo senha',
             'senha.min'      => 'A senha deve ter no mínimo 8 caractéres',
-            'tipo.required'  => 'É necessário escolher o tipo de usuário'
+            'tipo.required'  => 'É necessário escolher o tipo de usuário',
         ]);
 
-        $user->nome  = $request->nome;
-        $user->ramal = $request->ramal;
-        $user->senha = $request->senha;
-        $user->tipo  = $request->tipo;
+        $user->nome   = $request->nome;
+        $user->ramal  = $request->ramal;
+        $user->senha  = $request->senha;
+        $user->tipo   = $request->tipo;
+        $user->status = $request->status;
         $user->save();
 
         return redirect()

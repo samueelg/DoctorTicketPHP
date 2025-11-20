@@ -18,6 +18,7 @@
                             <th>Nome</th>
                             <th>Ramal</th>
                             <th>Tipo</th>
+                            <th>Status</th>
                             <th>Criado em</th>
                             <th>Atualizado em</th>
                             <th class="text-center">Ações</th>
@@ -30,6 +31,11 @@
                                 <td>{{ $user->nome }}</td>
                                 <td>{{ $user->ramal }}</td>
                                 <td>{{ strtoupper($user->tipo) }}</td>
+                                @if($user->status == 'ativo')
+                                    <td class="text-success">{{ strtoupper($user->status) }}</td>
+                                @else
+                                    <td class="text-danger">{{ strtoupper($user->status) }}</td>
+                                @endif
                                 <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
                                 @if($user->updated_at != $user->created_at)
                                 <td> {{$user->updated_at->format('d/m/Y H:i')}}</td>
