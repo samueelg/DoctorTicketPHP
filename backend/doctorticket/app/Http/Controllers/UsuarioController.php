@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    /* Exibe a view da lista de usuários */
     public function getUsuariosView()
     {
         $users = Usuario::all();
@@ -17,20 +15,15 @@ class UsuarioController extends Controller
         return view('User.users_list', ['users' => $users]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    /* Exibe a view de cadastrar usuário */
     public function getCreateUserView()
     {
         return view('User.create_user');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    /* Salva o usuário no banco de dados */
     public function saveUsuario(Request $request)
     {
-        //Método validate para verificar os dados da request
         $request->validate([
             'nome' => 'required',
             'ramal' => 'required|unique:usuarios,ramal',
@@ -58,17 +51,7 @@ class UsuarioController extends Controller
             ->with('success', 'Usuário criado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Usuario $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+    /* Exibe a view de editar usuário */
     public function getEditView(Usuario $user)
     {   
         if($user->id == null){
@@ -80,9 +63,7 @@ class UsuarioController extends Controller
         return view('User.edit_user', ['user' => $user]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    /* Guarda os dados de edição do usuário no banco*/
     public function editUsuario(Request $request, Usuario $user)
     {
         $request->validate([
@@ -110,9 +91,7 @@ class UsuarioController extends Controller
             ->with('success', 'Usuário editado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    /* Remoção do usuário  */
     public function removeUsuario(Usuario $user)
     {
         if(!$user){

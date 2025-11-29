@@ -65,6 +65,7 @@
                                 type="password" 
                                 class="form-control @error('senha') is-invalid @enderror" 
                                 id="senha" 
+                                value="{{ $user->nome }}"
                                 name="senha" 
                                 required
                             >

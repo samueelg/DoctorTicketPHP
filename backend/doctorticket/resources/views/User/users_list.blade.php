@@ -4,9 +4,6 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Lista de Usuários</h4>
-            <a href="{{ route('createUser') }}" class="btn btn-success">
-                + Novo Usuário
-            </a>
         </div>
 
         <div class="card shadow-sm">
@@ -86,6 +83,13 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-auto mt-2">
+                <a href="{{ route('createUser') }}" class="btn btn-success">
+                    + Novo Usuário
+                </a>
             </div>
         </div>
     </div>
