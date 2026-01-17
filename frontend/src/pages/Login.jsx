@@ -5,6 +5,13 @@ import logo from "../assets/images/oralsinlogo.jpg"
 
 export default function Login() {
     const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        console.log({ email, senha });
+    }
 
     return (
         <div className="login-page">
@@ -21,7 +28,68 @@ export default function Login() {
                 </div>
 
                 <div className="w-[55%]">
-                    Coluna 2 (60%)
+                    <div className="container pt-5">
+                    <div className="row p-8">
+                        <div className="col">
+                            <div className="text-3xl">Realizar Login</div>
+                        </div>
+                        <div className="col">
+                            <div className="container">
+                                <form action="POST" onSubmit={handleSubmit}>
+                                <div className="row pt-6">
+
+                                    {/*Input E-mail */}
+                                    <div className="col">
+                                        <Input
+                                        id='email'
+                                        label='E-mail'
+                                        type='email'
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="Digite seu e-mail"
+                                        className='max-w-md mt-4'
+                                        inputClassName='text-base'
+                                        />
+                                    </div>
+
+                                    {/*Input Senha */}
+                                    <div className="col">
+                                        <Input
+                                        id='senha'
+                                        label='Senha'
+                                        type='password'
+                                        onChange={(e) => setSenha(e.target.value)}
+                                        placeholder="Digite sua senha"
+                                        className='max-w-md mt-4'
+                                        inputClassName='text-base'
+                                        />
+                                    </div>
+
+                                    {/*Input E-mail */}
+                                    <div className="col">
+                                        <Button
+                                            type="submit"
+                                            text="Entrar"
+                                            className="mt-6 max-w-md"
+                                            buttonClassName="w-full"
+                                        />
+                                    </div>
+                                    <div className="col">
+                                        <hr className="my-7 border-t border-gray-300" />
+                                    </div>
+
+                                    <div className="col">
+                                        <div className="grid content-center">
+                                        <button type="button" className="text-md text-blue-600 hover:underline hover:text-blue-300">
+                                            Esqueci minha senha
+                                        </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
