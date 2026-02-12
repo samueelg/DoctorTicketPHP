@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Input from "../components/atoms/InputField";
-import Button from "../components/atoms/Button";
-import logo from "../assets/images/oralsinlogo.jpg"
+import Input from "../../components/atoms/InputField";
+import Button from "../../components/atoms/Button";
+import logo from "../../assets/images/oralsinlogo.jpg"
 
 export default function Login() {
     const [email, setEmail] = useState("");
