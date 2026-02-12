@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../../components/layout/Sidebar";
+import UserData from "../../components/layout/UserData";
 
 export default function AppLayout(){
     return (
@@ -8,6 +9,8 @@ export default function AppLayout(){
         <main className="flex-1 overflow-auto">
             <Outlet />
         </main>
-        </div>
+
+        <UserData/>
+    </div>
     );
 }
