@@ -21,7 +21,7 @@ export function Sidebar() {
           <span className="text-[10px] leading-none">Início</span>
         </NavLink>
 
-        <NavLink to="/login" className={linkClass}>
+        <NavLink to="/relatorios" className={linkClass}>
           <FolderIcon className="h-6 w-6" />
           <span className="text-[10px] leading-none">Relatórios</span>
         </NavLink>
@@ -31,7 +31,7 @@ export function Sidebar() {
           <span className="text-[10px] leading-none">Dashboard</span>
         </NavLink>
 
-        <NavLink className={linkClass}>
+        <NavLink to="/login" className={linkClass}>
           <UserIcon className="h-6 w-6" />
           <span className="text-[10px] leading-none">Perfil</span>
         </NavLink>
