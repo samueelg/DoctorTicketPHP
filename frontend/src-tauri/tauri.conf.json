@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "teste-appl",
+  "productName": "DoctorTicket",
   "version": "0.1.0",
-  "identifier": "com.teste-appl.app",
+  "identifier": "com.doctor-ticket.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "teste-appl",
+        "title": "DoctorTicket",
         "width": 800,
         "height": 600
       }
