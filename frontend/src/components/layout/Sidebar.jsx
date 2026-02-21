@@ -26,7 +26,7 @@ export function Sidebar() {
           <span className="text-[10px] leading-none">Relatórios</span>
         </NavLink>
 
-        <NavLink className={linkClass}>
+        <NavLink to="/ligacaoFinalizada" className={linkClass}>
           <ChatBubbleLeftRightIcon className="h-6 w-6" />
           <span className="text-[10px] leading-none">Dashboard</span>
         </NavLink>
