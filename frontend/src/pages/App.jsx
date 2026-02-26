@@ -4,6 +4,7 @@ import Login from "./auth/Login";
 import LigacaoFinalizada from "./LigacaoFinalizada";
 import AppLayout from "./layouts/AppLayout";
 import Relatorios from "./Relatorios";
+import RelatorioBase from "./RelatorioBase";
 
 export default function App(){
     return(
@@ -14,6 +15,7 @@ export default function App(){
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/ligacaoFinalizada" element={<LigacaoFinalizada/>}/>
                     <Route path="/relatorios" element={<Relatorios/>}/>
+                    <Route path="/relatorio/base" element={<RelatorioBase/>}/>
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
             </Routes>
