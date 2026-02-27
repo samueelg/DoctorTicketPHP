@@ -12,7 +12,14 @@ class Usuario extends Authenticatable
     use HasApiTokens;
 
     protected $table = 'usuarios';
-    protected $fillable = ['status'];
+    protected $fillable = [
+        'nome',
+        'ramal',
+        'email',
+        'senha',
+        'tipo',
+        'status'
+    ];
 
     public function getAuthPassword()
     {

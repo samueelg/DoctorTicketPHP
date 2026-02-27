@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveUsuarioRequest;
+use App\Http\Requests\UpdateUsuarioRequest;
 use App\Models\Usuario;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class UsuarioController extends Controller
 {
@@ -15,87 +18,106 @@ class UsuarioController extends Controller
         ], 200);
     }
 
-    /* Salva o usuário no banco de dados */
-    public function saveUsuario(Request $request)
-    {
-        $request->validate([
-            'nome' => 'required',
-            'ramal' => 'required|unique:usuarios,ramal',
-            'senha' => 'required|min:8',
-            'tipo' => 'required'
-        ],
-        [
-            'nome.required'  => 'É necessário preencher o campo nome',
-            'ramal.required' => 'É necessário preencher o campo ramal',
-            'ramal.unique'   => 'Este ramal já esta sendo utilizado',
-            'senha.required' => 'É necessário preencher o campo senha',
-            'senha.min'      => 'A senha deve ter no mínimo 8 caractéres',
-            'tipo.required'  => 'É necessário escolher o tipo de usuário'
-        ]);
-
-        $user = new Usuario();
-        $user->nome = $request->nome;
-        $user->ramal = $request->ramal;
-        $user->senha = $request->senha;
-        $user->tipo = $request->tipo;
-        $user->save();
-        
-        return redirect()
-            ->route('usersList')
-            ->with('success', 'Usuário criado com sucesso!');
-    }
-
-    /* Exibe a view de editar usuário */
-    public function getEditView(Usuario $user)
-    {   
-        if($user->id == null){
-            return redirect()
-            ->route('usersList')
-            ->with('error', 'ID Usuário não encontrado');
+    public function getUsuario(Usuario $user){
+        if(!$user){
+            return response()->json([
+                'message' => 'Usuário não encontrado',
+            ], 404);
         }
 
-        return view('User.edit_user', ['user' => $user]);
+        return response()->json([
+            'data' => $user,
+        ], 200);
+    }
+
+    /* Salva o usuário no banco de dados */
+    public function saveUsuario(SaveUsuarioRequest $request)
+    {
+        try {
+            $user = Usuario::create([
+                'nome'  => $request->nome,
+                'ramal' => $request->ramal,
+                'email' => $request->email,
+                'senha' => Hash::make($request->senha),
+                'tipo'  => $request->tipo,
+                'status' => 'ativo',
+            ]);
+
+            return response()->json([
+                'message' => 'Usuário criado com sucesso',
+                'data' => [
+                    'id' => $user->id,
+                    'nome' => $user->nome,
+                    'email' => $user->email,
+                    'ramal' => $user->ramal,
+                    'tipo' => $user->tipo,
+                ],
+            ], 201);
+        } catch (Exception $e) {
+            report($e);
+            return response()->json([
+                'message' => 'Erro ao criar usuário',
+            ], 500);
+        }
     }
 
     /* Guarda os dados de edição do usuário no banco*/
-    public function editUsuario(Request $request, Usuario $user)
+    public function editUsuario(UpdateUsuarioRequest $request, Usuario $user)
     {
-        $request->validate([
-            'nome' => 'required',
-            'ramal' => 'required',
-            'senha' => 'required|min: 8',
-            'tipo' => 'required',
-        ],
-        [
-            'nome.required'  => 'É necessário preencher o campo nome',
-            'senha.required' => 'É necessário preencher o campo senha',
-            'senha.min'      => 'A senha deve ter no mínimo 8 caractéres',
-            'tipo.required'  => 'É necessário escolher o tipo de usuário',
-        ]);
+        if (!$user) {
+            return response()->json([
+                'message' => 'Usuário não encontrado',
+            ], 404);
+        }
 
-        $user->nome   = $request->nome;
-        $user->ramal  = $request->ramal;
-        $user->senha  = $request->senha;
-        $user->tipo   = $request->tipo;
-        $user->status = $request->status;
-        $user->save();
+        try {
+            $user->update([
+                'nome'  => $request->nome,
+                'ramal' => $request->ramal,
+                'email' => $request->email,
+                'senha' => Hash::make($request->senha),
+                'tipo'  => $request->tipo,
+                'status' => 'ativo',
+            ]);
 
-        return redirect()
-            ->route('usersList')
-            ->with('success', 'Usuário editado com sucesso!');
+            return response()->json([
+                'message' => 'Usuário editado com sucesso',
+                'data' => [
+                    'id' => $user->id,
+                    'nome' => $user->nome,
+                    'email' => $user->email,
+                    'ramal' => $user->ramal,
+                    'tipo' => $user->tipo,
+                ],
+            ], 200);
+        } catch (Exception $e) {
+            report($e);
+            return response()->json([
+                'message' => 'Erro ao editar usuário',
+            ], 500);
+        }
     }
 
     /* Remoção do usuário  */
     public function removeUsuario(Usuario $user)
     {
-        if(!$user){
-            return redirect()
-                ->route('usersList')
-                ->with('error', 'Usuário não encontrado.');
+        if (!$user) {
+            return response()->json([
+                'message' => 'Usuário não encontrado',
+            ], 404);
         }
-        $user->delete();
-        return redirect()
-            ->route('usersList')
-            ->with('success', 'Usuário deletado com sucesso');
+
+        try {
+            $user->delete();
+
+            return response()->json([
+                'message' => 'Usuário deletado com sucesso',
+            ], 200);
+        } catch (Exception $e) {
+            report($e);
+            return response()->json([
+                'message' => 'Erro ao deletar usuário',
+            ], 500);
+        }
     }
 }
