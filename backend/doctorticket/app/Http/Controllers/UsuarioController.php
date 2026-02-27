@@ -12,7 +12,7 @@ class UsuarioController extends Controller
     {
         $users = Usuario::all();
 
-        return view('User.users_list', ['users' => $users]);
+        return response()->json($users);
     }
 
     /* Exibe a view de cadastrar usuário */
