@@ -7,18 +7,12 @@ use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
-    /* Exibe a view da lista de usuários */
-    public function getUsuariosView()
-    {
-        $users = Usuario::all();
-
-        return response()->json($users);
-    }
-
-    /* Exibe a view de cadastrar usuário */
-    public function getCreateUserView()
-    {
-        return view('User.create_user');
+    public function getUsuarios(){
+        $usuarios = Usuario::all();
+        
+        return response()->json([
+            'data' => $usuarios,
+        ], 200);
     }
 
     /* Salva o usuário no banco de dados */
