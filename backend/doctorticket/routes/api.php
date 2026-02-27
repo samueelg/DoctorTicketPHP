@@ -14,7 +14,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 /* Rotas de Usuários */
-Route::get('/usuarios', [UsuarioController::class, 'getUsuarios'])->name('usuarios');
-Route::post('/usuarios/create', [UsuarioController::class, 'saveUsuario'])->name('usuarios.create');
-Route::post('/usuarios/edit/{user}', [UsuarioController::class, 'editUsuario'])->name('usuarios.edit');
-Route::delete('/usuarios/delete/{user}', [UsuarioController::class, 'removeUsuario'])->name('usuarios.delete');
+Route::middleware('auth:sanctum')->get('/usuarios', [UsuarioController::class, 'getUsuarios'])->name('usuarios');
+Route::middleware('auth:sanctum')->get('/usuarios/{user}', [UsuarioController::class, 'getUsuario'])->name('usuarios');
+Route::middleware('auth:sanctum')->post('/usuarios', [UsuarioController::class, 'saveUsuario'])->name('usuarios.create');
+Route::middleware('auth:sanctum')->patch('/usuarios/{user}', [UsuarioController::class, 'editUsuario'])->name('usuarios.edit');
+Route::middleware('auth:sanctum')->delete('/usuarios/{user}', [UsuarioController::class, 'removeUsuario'])->name('usuarios.delete');
