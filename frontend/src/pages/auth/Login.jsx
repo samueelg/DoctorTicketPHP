@@ -2,15 +2,31 @@ import { useState } from "react";
 import Input from "../../components/atoms/InputField";
 import Button from "../../components/atoms/Button";
 import logo from "../../assets/images/oralsinlogo.jpg"
+import { api } from "../../services/api";
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [erro, setErro] = useState("");
+    const navigate = useNavigate();
 
-    async function handleSubmit(e) {
+    async function handleLogin(e) {
         e.preventDefault();
+        setErro("");
 
-        console.log({ email, senha });
+        try{
+            const res = await api.post('/login', {email,senha});
+
+            if(res.status == 200){
+                localStorage.setItem('token', res.data.token);
+                navigate("/")
+            }
+
+        }catch(err){
+            setErro(err.response?.data?.message || "Falha no login");
+            console.log(err);
+        }
     }
 
     return (
@@ -35,7 +51,7 @@ export default function Login() {
                         </div>
                         <div className="col">
                             <div className="container">
-                                <form action="POST" onSubmit={handleSubmit}>
+                                <form action="POST" onSubmit={handleLogin}>
                                 <div className="row pt-6">
 
                                     {/*Input E-mail */}

@@ -29,7 +29,7 @@ class AuthController extends Controller
         }
 
         //Cria token de autenticação
-        $token = $user->createToken('tauri_auth_token')->plainTextToken;
+        $token = $user->createToken('token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login realizado com sucesso',
