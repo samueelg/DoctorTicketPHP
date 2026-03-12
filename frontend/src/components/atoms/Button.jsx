@@ -15,6 +15,7 @@ export default function Button({
         red: "text-white bg-red-600 hover:bg-red-700 focus:ring-red-500",
         gray: "text-white bg-gray-600 hover:bg-gray-700 focus:ring-gray-500",
         outline: "bg-transparent border border-gray-300 text-gray-800 bg-gray-200 hover:bg-gray-300 focus:ring-gray-400",
+        none: ''
     };
 
     return (
