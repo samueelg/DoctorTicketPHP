@@ -1,0 +1,8 @@
+services:
+  transcriber:
+    build:
+      context: ./transcriber
+      dockerfile: Dockerfile
+    container_name: transcriber
+    ports:
+      - "127.0.0.1:8000:8000"
