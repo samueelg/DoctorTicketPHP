@@ -7,23 +7,34 @@ import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import Button from "../components/atoms/Button";
 import { usuariosService } from '../services/usuarioService';
-import InputField from "../components/atoms/InputField";
 import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
+import UserModal from '../components/organisms/UserModal'
 
 
 export default function CadastroUsuarios(){
     const [usuarios, setUsuarios] = useState([]);
     const [visible, setVisible]   = useState(false);
-    const [erros, setErro]         = useState('');
+    const [visibleConfirm, setVisibleConfirm]   = useState(false);
+    const [erros, setErro]        = useState({});
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+    const [mode, setMode] = useState('create');
     const [loading, setLoading]   = useState(true);
-    const [checked, setChecked]   = useState(false);
-    const [nome,setNome]          = useState('');
-    const [ramal, setRamal]       = useState('');
-    const [senha, setSenha]       = useState('');
-    const [tipo, setTipo]         = useState('');
-    const [email,setEmail]        = useState('');
     const toast = useRef(null);
+    const [formData, setFormData] = useState({
+        nome: "",
+        email: "",
+        ramal: "",
+        tipo: "",
+        senha: ""
+    });
+
+    const handleChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
 
     //Carrega os dados ao iniciar a página
     useEffect(() => {
@@ -39,6 +50,20 @@ export default function CadastroUsuarios(){
         });
     }
 
+    //Reseta os dados e fecha a modal
+    function handleCloseModal() {
+        setVisible(false);
+        setFormData({
+            nome: "",
+            email: "",
+            ramal: "",
+            tipo: "",
+            senha: ""
+        });
+        setMode("create");
+        setUsuarioSelecionado(null);
+    }
+
     async function getUsuarios(){
         try{
             const response = await usuariosService.list();
@@ -51,28 +76,64 @@ export default function CadastroUsuarios(){
         }
     }
 
-    async function cadastrarUsuarioSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        const data = {
-            nome,
-            tipo,
-            ramal,
-            email,
-            senha
-        }
+        //Dados de cadastro
+        const data = formData;
 
         setErro({});
         try {
-            const response = await usuariosService.create(data);
+            let response;
 
-            console.log(response);
+            if (mode === "editar") {
+                response = await usuariosService.patch(usuarioSelecionado.id, formData);
+            } else {
+                response = await usuariosService.create(formData);
+            }
 
-            if (response.status == 201) {
-                setVisible(false);
-                showToast('success', 'Sucesso', 'Usuário cadastrado com sucesso!');
+            if (response.status == 201 || response.status == 200){
+                showToast('success', 'Sucesso', mode == 'editar' ? 'Usuário editado com sucesso!' : 'Usuário cadastrado com sucesso!');
+                handleCloseModal();
                 getUsuarios();
             }
         } catch (err) {
+            const errosApi = err.response?.data?.errors || {};
+            setErro(errosApi);
+            console.log('erros: ',erros);
+        }
+    }
+
+    function abrirModalCadastro(){
+        setMode('cadastro');
+        setVisible(true);
+    }
+
+    function abrirModalRemover(id){
+        setVisibleConfirm(true);
+        setUsuarioSelecionado(id);
+    }
+
+    function abrirModalEditar(usuarioRow){
+        setUsuarioSelecionado(usuarioRow);
+        setFormData(usuarioRow);
+        setMode('editar');
+        setVisible(true);
+    }
+
+    async function removeUsuario(e){
+        e.preventDefault();
+        const id = usuarioSelecionado;
+
+        try{
+            const response = await usuariosService.remove(id);
+
+            if(response.status == 200){
+                setVisibleConfirm(false);
+                showToast('success', 'Sucesso', 'Usuário removido com sucesso!');
+                getUsuarios();
+            }
+        }catch(err){
+            showToast('error', 'Erro', 'Ocorreu um erro ao remover o usuário');
             const errosApi = err.response?.data?.errors || {};
             setErro(errosApi);
             console.log('erros: ',erros);
@@ -86,7 +147,7 @@ export default function CadastroUsuarios(){
             <Button
                 type="button"
                 text=""
-                onClick={() => setVisible(true)}
+                onClick={() => abrirModalEditar(row)}
                 buttonClassName="w-full"
                 variant="none"
                 icon={<PencilIcon className="h-4 w-4" />}
@@ -96,7 +157,7 @@ export default function CadastroUsuarios(){
             <Button
                 type="button"
                 text=""
-                onClick={() => setVisible(true)}
+                onClick={() => abrirModalRemover(row.id)}
                 buttonClassName="w-full"
                 variant="none"
                 icon={<TrashIcon className="h-4 w-4" />}
@@ -105,6 +166,7 @@ export default function CadastroUsuarios(){
         </div>
     );
 
+    //Ajusta a exibição do status na row
     const statusTemplate = (rowData) => {
         const status = rowData.status;
 
@@ -118,6 +180,7 @@ export default function CadastroUsuarios(){
         }
     }
 
+    //Ajusta a exibição do tipo na row
     const tipoTemplate = (rowData) => {
         const tipo = rowData.tipo;
 
@@ -162,7 +225,7 @@ export default function CadastroUsuarios(){
                         <Button
                             type="button"
                             text="Cadastrar Usuário"
-                            onClick={() => setVisible(true)}
+                            onClick={abrirModalCadastro}
                             buttonClassName="w-full rounded-2xl shadow-md"
                             variant="green"
                             icon={<PlusIcon className="h-5 w-5 ml-1"/>}
@@ -183,100 +246,40 @@ export default function CadastroUsuarios(){
                         </section>
                     </div>
 
-                    <div className="modal-cadastro">
-                        <Dialog header="Cadastro de Usuário" visible={visible} style={{ width: '50vw' }} onHide={() => { if (!visible) return; setVisible(false); }}>
-                            <form action="POST" onSubmit={cadastrarUsuarioSubmit}>
-                            <div className="justify-center mb-3">
-                                <div className="flex flex-row">
-                                    <div className='mb-2'>
-                                        <input type="radio" value="analista" id="tipoAnalista" name="tipoUsuario" className="w-5 h-5" onChange={(e) => setTipo(e.target.value)}/>
-                                        <label className="ml-2" labelFor="checkAnalista">Analista</label>
-                                    </div>
-                                    <div className='mb-2 ml-4'>
-                                        <input type="radio" value="admin" id="tipoAdmin" name="tipoUsuario" className="w-5 h-5" onChange={(e) => setTipo(e.target.value)}/>
-                                        <label className="ml-2" labelFor="checkAnalista">Aministrador</label>
-                                    </div>
-                                </div>
-                                    {erros.tipo && (
-                                        <small className="text-red-500">{erros.tipo[0]}</small>
-                                    )}
+                    <UserModal
+                        onSubmit={handleSubmit}
+                        onHide={handleCloseModal}
+                        visible={visible}
+                        mode={mode}
+                        initialData={usuarioSelecionado}
+                        formData={formData}
+                        onChange={handleChange}
+                        erros={erros}
+                    />
 
-                                <div className="flex flex-row mb-2">
-                                    <div className="w-full">
-                                        <InputField
-                                            id='nomeCadastro'
-                                            type='text'
-                                            label={'Nome do Usuário'}
-                                            onChange={(e) => setNome(e.target.value)}
-                                             placeholder="Digite o nome do analista"
-                                            className='w-full'
-                                            inputClassName={`text-base ${erros.nome ? 'border-red-500' : ''}`}
-                                        />
-
-                                        {erros.nome && (
-                                            <small className="text-red-500">{erros.nome[0]}</small>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="flex flex-row mb-2">
-                                        <div className='w-full'>
-                                            <InputField
-                                                id='emailCadastro'
-                                                type='text'
-                                                label={'E-mail'}
-                                                onChange={(e) => setEmail(e.target.value)}
-                                                placeholder="Digite o e-mail do usuário"
-                                                className='w-full'
-                                                inputClassName={`text-base ${erros.email ? 'border-red-500' : ''}`}
-                                            />
-                                            
-                                            {erros.email && (
-                                                <small className="text-red-500">{erros.email[0]}</small>
-                                            )}
-                                        </div>
-                                </div>
-                                <div className='grid grid-cols-2 gap-2'>
-                                        <div className='w-full'>
-                                            <InputField
-                                                id='ramalCadastro'
-                                                type='text'
-                                                label={'Ramal:'}
-                                                onChange={(e) => setRamal(e.target.value)}
-                                                placeholder="Digite o ramal"
-                                                className='w-full'
-                                                inputClassName={`text-base ${erros.ramal ? 'border-red-500' : ''}`}
-                                            />
-
-                                            {erros.ramal && (
-                                                <small className="text-red-500">{erros.ramal[0]}</small>
-                                            )}
-                                        </div>
-                                        <div className='w-full'>
-                                            <InputField
-                                                id='nomeAnalista'
-                                                type='password'
-                                                label={'Senha:'}
-                                                onChange={(e) => setSenha(e.target.value)}
-                                                placeholder="Digite a senha"
-                                                className='w-full'
-                                                inputClassName={`text-base ${erros.senha ? 'border-red-500' : ''}`}
-                                            />
-
-                                            {erros.senha && (
-                                                <small className="text-red-500">{erros.senha[0]}</small>
-                                            )}
-                                        </div>
-                                </div>
+                    <div className="modal-deletar">
+                        <Dialog header="Confirmação" visible={visibleConfirm} style={{ width: '50vw' }} onHide={() => { if (!visibleConfirm) return; setVisibleConfirm(false); }}>
+                            <form action="DELETE" onSubmit={removeUsuario}>
+                            <div className="flex justify-center mb-3">
+                                <span>Deseja confirmar a remoção?</span>
                             </div>
-                            <div className='flex flex-row justify-end'>
+                            <hr className='mb-2'/>
+                            <div className="flex flex-cols-2 justify-end gap-3">
                                 <Button
                                     type="submit"
-                                    text="Cadastrar Usuário"
+                                    text="Sim"
                                     buttonClassName="w-full rounded-2xl shadow-md"
                                     variant="green"
                                 />
+                                <Button
+                                    type="button"
+                                    text="Não"
+                                    onClick={() => setVisibleConfirm(false)}
+                                    buttonClassName="w-full rounded-2xl shadow-md"
+                                    variant="red"
+                                />
                             </div>
-                        </form>
+                            </form>
                         </Dialog>
                     </div>
                 </div>
