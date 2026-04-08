@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class TranscricaoController extends Controller
 {
     public function transcreverLigacao(Request $request){
-        dd('teste');
         $request->validate([
             'audio' => 'file',
         ]);
@@ -20,7 +20,7 @@ class TranscricaoController extends Controller
                 file_get_contents($arquivo->getRealPath()),
                 $arquivo->getClientOriginalName()
             )
-            ->post('http://127.0.0.1:8030/transcribe');
+            ->post('http://127.0.0.1:8001/transcribe');
 
         return response()->json($response->json(), $response->status());
     }

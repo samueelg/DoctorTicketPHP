@@ -7,8 +7,8 @@ export default function Inicio() {
 
   async function enviarAudio(e) {
     e.preventDefault();
-    console.log('abriu');
-    const response = await fetch("/audio/audio4.mp3"); // pode ser local/public
+    //TODO - Usar audio do servidor ao invés de audio local
+    const response = await fetch("/audio/audio4.mp3");
     const blob = await response.blob();
 
     const formData = new FormData();
