@@ -8,13 +8,7 @@ export default function Inicio() {
   async function enviarAudio(e) {
     e.preventDefault();
     //TODO - Usar audio do servidor ao invés de audio local
-    const response = await fetch("/audio/audio4.mp3");
-    const blob = await response.blob();
-
-    const formData = new FormData();
-    formData.append("audio", blob, "audio.mp3");
-
-    const result = await ligacaoService.transcrever(formData);
+    const result = await ligacaoService.transcrever();
 
     console.log(result.data);
   }

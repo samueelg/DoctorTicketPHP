@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Transcricao\Providers\GroqTranscricaoProvider;
+use App\Services\Transcricao\Providers\TranscricaoProvider;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(TranscricaoProvider::class, function () {
+            return new GroqTranscricaoProvider();
+        });
     }
 
     /**
