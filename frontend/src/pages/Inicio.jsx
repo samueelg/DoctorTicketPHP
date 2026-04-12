@@ -2,15 +2,22 @@ import { useState } from "react";
 import { PhoneIcon } from "@heroicons/react/24/solid";
 import Button from "../components/atoms/Button";
 import { ligacaoService } from "../services/ligacaoService";
+import { useNavigate } from "react-router-dom";
 
 export default function Inicio() {
+  const navigate = useNavigate();
 
   async function enviarAudio(e) {
     e.preventDefault();
     //TODO - Usar audio do servidor ao invés de audio local
     const result = await ligacaoService.transcrever();
+    const data = result.data
 
-    console.log(result.data);
+    if(result.status == 200){
+      navigate('/ligacaoFinalizada', {
+        state: { data }
+      });
+    }
   }
 
 return (

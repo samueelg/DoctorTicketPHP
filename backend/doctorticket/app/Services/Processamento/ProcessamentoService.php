@@ -18,30 +18,30 @@ class ProcessamentoService{
             Retorne APENAS um JSON válido no seguinte formato:
 
             {
-            "titulo": "SOLICITAÇÃO TEL - (Tipo da solicitacao)",
+            "titulo": "Solicitação Telefone - (Tipo da solicitação) - Unidade(se huver)",
             "assunto": "",
             "solicitante": "",
             "unidade": ""
             }
 
             Regras:
-            - "titulo": "SOLICITAÇÃO TEL - (resumo curto e claro do problema (máximo 10 palavras))"
+            - "titulo": "Solicitação Telefone - (resumo curto e claro do problema (máximo 10 palavras) - Unidade(se huver)"
             - "assunto": Preencha as informaçẽos coletadas com base na seguinte estrutura:
-                Olá! Bom dia/Boa tarde!
+                Olá! Bom dia/Boa tarde!\n\n
 
-                Foi registrado a Solicitação por telefone ao SAF.
+                Foi registrado a Solicitação por telefone ao SAF.\n\n
 
-                Dúvida/Solicitação: (Solicitação feita pelo franqueado, ou duvida referente ao sistema)
+                Dúvida/Solicitação: (Solicitação feita pelo franqueado, ou duvida referente ao sistema)\n\n
 
-                Orientação/Solução: (Se não houver, retornar: Orientação informada durante a ligação)
+                Orientação/Solução: (Descreva de forma objetiva a ação realizada pelo analista para resolver a solicitação, siga essas regras: 1.Use frases curtas e diretas; 2.Descreva a ação concluída (ex: "Transferência de paciente realizada"); 3.Sempre escrever no passado. Exemplo de Respostas Validas: 1."Transferência de paciente realizada conforme solicitado"; 2."Auxílio na alteração de contrato atráves do AnyDesk"; 3."Contrato cancelado revertido durante a ligação") 
 
-                Solicitante: (Se não houver, colocar: Não informado)
+                Solicitante: (Se não houver, colocar: Não informado)\n\n
 
-                Paciente: (Se não houver, colocar: Não informado)
+                Paciente: (Se não houver, colocar: Não informado)\n\n
 
-                Unidade: (Se não houver, colocar: Não informado)
+                Unidade: (Se não houver, colocar: Não informado)\n\n
 
-                A sua avaliação é muito importante, se possível avalie o meu atendimento através da mensagem desse ticket. Obrigado!
+                A sua avaliação é muito importante, se possível avalie o meu atendimento através da mensagem desse ticket. Obrigado!\n\n
             
             - "solicitante": nome da pessoa que iniciou a ligação
             - "unidade": cidade ou unidade da clínica mencionada (se não encontrar, retornar "Não informado")
@@ -52,7 +52,7 @@ class ProcessamentoService{
 
             Regras importantes:
             - Se hora < 12, use "Bom dia" no assunto 
-            - Se >= 12, use "Boa tarde"
+            - Se hora >= 12, use "Boa tarde"
             - NÃO inventar informações
             - Se não souber algum campo, usar "Não informado"
             - Respeitar a estrutura do assunto, deixando no mesmo formato

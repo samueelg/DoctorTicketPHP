@@ -1,9 +1,31 @@
+import { useLocation } from "react-router-dom";
 import Button from "../components/atoms/Button";
 import Input from "../components/atoms/InputField";
 import Textarea from "../components/atoms/Textarea";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
 
 export default function LigacaoFinalizada() {
+    const location = useLocation();
+    const dados = location.state?.data;
+    const [form, setForm] = useState({
+        titulo: "",
+        unidade: "",
+        assunto: "",
+        solicitante: "",
+    });
+
+    useEffect(() => {
+        if (dados) {
+            setForm({
+                titulo: dados.titulo,
+                unidade: dados.unidade,
+                assunto: dados.assunto,
+                solicitante: dados.solicitante
+            })
+        }
+    }, [dados]);
+
     return (
         <div className="ligacaoFinalizada-page">
             <div className="flex w-full min-h-screen justify-center items-center">
@@ -23,9 +45,10 @@ export default function LigacaoFinalizada() {
                     </div>
                     <div className="row mt-2">
                         <Input
-                                id='email'
-                                type='email'
-                                onChange={(e) => setEmail(e.target.value)}
+                                id='titulo'
+                                type='text'
+                                value={form.titulo}
+                                onChange={(e) => setForm({titulo: e.target.value})}
                                 placeholder="Digite o titulo da solicitação"
                                 className='max-w-md'
                                 inputClassName='text-base'
@@ -34,17 +57,19 @@ export default function LigacaoFinalizada() {
                         <div className="row mt-2">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 <Input
-                                    id='email'
-                                    type='email'
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    id='unidade'
+                                    type='text'
+                                    value={form.unidade}
+                                    onChange={(e) => setForm({unidade: e.target.value})}
                                     placeholder="Digite a Unidade"
                                     className='max-w-md'
                                     inputClassName='text-base'
                                 />
                                 <Input
-                                    id='email'
-                                    type='email'
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    id='solicitante'
+                                    type='solicitante'
+                                    value={form.solicitante}
+                                    onChange={(e) => setForm({solicitante: e.target.value})}
                                     placeholder="Digite o solicitante"
                                     className='max-w-md'
                                     inputClassName='text-base'
@@ -53,8 +78,9 @@ export default function LigacaoFinalizada() {
                         </div>
                         <div className="row mt-2">
                         <Textarea
-                            id='email'
-                            onChange={(e) => setEmail(e.target.value)}
+                            id='assunto'
+                            value={form.assunto}
+                            onChange={(e) => setForm({assunto: e.target.value})}
                             placeholder="Digite a mensagem da solicitação"
                             rows={6}
                         />
