@@ -15,6 +15,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 /* Rotas de Usuários */
+Route::middleware('auth:sanctum')->get('/me', [UsuarioController::class, 'getDadosUsuario'])->name('me');
 Route::middleware('auth:sanctum')->get('/usuarios', [UsuarioController::class, 'getUsuarios'])->name('usuarios');
 Route::middleware('auth:sanctum')->get('/usuarios/{user}', [UsuarioController::class, 'getUsuario'])->name('usuarios');
 Route::middleware('auth:sanctum')->post('/usuarios', [UsuarioController::class, 'saveUsuario'])->name('usuarios.create');

@@ -3,8 +3,7 @@ import Inicio from "../pages/Inicio";
 import Login from "../pages/auth/Login";
 import LigacaoFinalizada from "../pages/LigacaoFinalizada";
 import AppLayout from "../pages/layouts/AppLayout";
-import Relatorios from "../pages/Relatorios";
-import RelatorioBase from "../pages/RelatorioBase";
+import Relatorio from "../pages/Relatorio";
 import PrivateRoute from "./AppPrivateRoutes";
 import CadastroUsuarios from "../pages/CadastroUsuarios";
 
@@ -28,12 +27,7 @@ export default function AppRoutes(){
                     }/>
                     <Route path="/relatorios" element={
                         <PrivateRoute>
-                            <Relatorios/>
-                        </PrivateRoute>
-                    }/>
-                    <Route path="/relatorio/base" element={
-                        <PrivateRoute>
-                            <RelatorioBase/>
+                            <Relatorio/>
                         </PrivateRoute>
                     }/>
                     <Route path="/cadastro" element={

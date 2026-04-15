@@ -18,14 +18,14 @@ class ProcessamentoService{
             Retorne APENAS um JSON válido no seguinte formato:
 
             {
-            "titulo": "Solicitação Telefone - (Tipo da solicitação) - Unidade(se huver)",
+            "titulo": "Solicitação Telefone - (Tipo da solicitação)",
             "assunto": "",
             "solicitante": "",
             "unidade": ""
             }
 
             Regras:
-            - "titulo": "Solicitação Telefone - (resumo curto e claro do problema (máximo 10 palavras) - Unidade(se huver)"
+            - "titulo": "Solicitação Telefone - (resumo curto e claro do problema (máximo 10 palavras)"
             - "assunto": Preencha as informaçẽos coletadas com base na seguinte estrutura:
                 Olá! Bom dia/Boa tarde!\n\n
 

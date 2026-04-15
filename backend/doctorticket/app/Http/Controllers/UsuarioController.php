@@ -7,9 +7,21 @@ use App\Http\Requests\UpdateUsuarioRequest;
 use App\Models\Usuario;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
+    public function getDadosUsuario(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'id' => $user->id,
+            'nome' => $user->nome,
+            'ramal' => $user->ramal,
+        ]);
+    }
+
     public function getUsuarios(){
         $usuarios = Usuario::all();
         

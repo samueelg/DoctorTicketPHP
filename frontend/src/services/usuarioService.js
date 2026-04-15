@@ -1,6 +1,7 @@
 import { api } from "./api";
 
 export const usuariosService = {
+  me: () => api.get("/me"),
   list: (params) => api.get("/usuarios", { params }),
   get: (id) => api.get(`/usuarios/${id}`),
   create: (payload) => api.post("/usuarios", payload),
