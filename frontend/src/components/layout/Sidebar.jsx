@@ -36,7 +36,7 @@ export function Sidebar() {
           <span className="text-[10px] leading-none">Usuários</span>
         </NavLink>
 
-        <NavLink to="" className={(p) => linkClass(p) + " mt-auto"}>
+        <NavLink to="/configuracoes" className={(p) => linkClass(p) + " mt-auto"}>
           <Cog6ToothIcon className="h-6 w-6" />
           <span className="text-[10px] leading-none">Config</span>
         </NavLink>

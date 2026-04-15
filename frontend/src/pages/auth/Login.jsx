@@ -4,10 +4,13 @@ import Button from "../../components/atoms/Button";
 import logo from "../../assets/images/oralsinlogo.jpg"
 import { api } from "../../services/api";
 import { useNavigate } from 'react-router-dom';
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [showSenha, setShowSenha] = useState(false);
+    const [iconSenha, setIconSenha] = useState(<EyeIcon className="w-5"/>)
     const [erro, setErro] = useState("");
     const navigate = useNavigate();
 
@@ -26,6 +29,16 @@ export default function Login() {
         }catch(err){
             setErro(err.response?.data?.message || "Falha no login");
             console.log(err);
+        }
+    }
+
+    async function changeShowPassword(){
+        setShowSenha(!showSenha);
+
+        if(showSenha){
+            setIconSenha(<EyeIcon className="w-5"/>);
+        }else{
+            setIconSenha(<EyeSlashIcon className="w-5"/>);
         }
     }
 
@@ -68,15 +81,22 @@ export default function Login() {
                                     </div>
 
                                     {/*Input Senha */}
-                                    <div className="col">
+                                    <div className="col relative w-full">
                                         <Input
                                         id='senha'
                                         label='Senha'
-                                        type='password'
+                                        type={showSenha ? 'text' : 'password'}
                                         onChange={(e) => setSenha(e.target.value)}
                                         placeholder="Digite sua senha"
                                         className='max-w-md mt-4'
                                         inputClassName='text-base'
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="none"
+                                            onClick={changeShowPassword}
+                                            className="absolute right-1 top-12 -translate-y-1/2 text-gray-500"
+                                            icon={iconSenha}
                                         />
                                     </div>
 

@@ -6,6 +6,7 @@ import AppLayout from "../pages/layouts/AppLayout";
 import Relatorio from "../pages/Relatorio";
 import PrivateRoute from "./AppPrivateRoutes";
 import CadastroUsuarios from "../pages/CadastroUsuarios";
+import Configuracoes from "../pages/Configuracoes";
 
 export default function AppRoutes(){
     return(
@@ -33,6 +34,11 @@ export default function AppRoutes(){
                     <Route path="/cadastro" element={
                         <PrivateRoute>
                             <CadastroUsuarios/>
+                        </PrivateRoute>
+                    }/>
+                    <Route path="/configuracoes" element={
+                        <PrivateRoute>
+                            <Configuracoes/>
                         </PrivateRoute>
                     }/>
                 </Route>
