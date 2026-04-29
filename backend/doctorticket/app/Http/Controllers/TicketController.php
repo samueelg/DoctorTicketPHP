@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Request;
 class TicketController extends Controller
 {
     public function finalizaLigacao(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService){
-        $audioPath = public_path('audio/audio4.mp3');
+        $audioPath = public_path('audio/audio6.mp3');
+        
         $transcricao = $transcricaoService->transcrever($audioPath);
 
         $processamento = $processamentoService->processarDados($transcricao);
@@ -26,7 +27,7 @@ class TicketController extends Controller
 
             $ticket = Ticket::create([
                 'titulo' => $request->titulo,
-                'assunto' => $request->assunto,
+                'assunto' => $request->descricaoAssunto,
                 'data_conclusao' => $dataAtual,
                 'status' => $request->status,
                 'idUsuario' => $request->user()->id,

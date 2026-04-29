@@ -1,30 +1,57 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/atoms/Button";
 import Input from "../components/atoms/InputField";
 import Textarea from "../components/atoms/Textarea";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import { ticketService } from "../services/ticketService";
 
 export default function LigacaoFinalizada() {
     const location = useLocation();
     const dados = location.state?.data;
+    const navigate = useNavigate();
+    const [erro, setErro] = useState({});
     const [form, setForm] = useState({
         titulo: "",
-        unidade: "",
         assunto: "",
         solicitante: "",
-    });
+        categoria: "",
+        status: "",
+        urgencia: ""
+        });
 
     useEffect(() => {
         if (dados) {
             setForm({
                 titulo: dados.titulo,
-                unidade: dados.unidade,
                 assunto: dados.assunto,
-                solicitante: dados.solicitante
+                descricaoAssunto: dados.descricaoAssunto,
+                solicitante: dados.solicitante,
+                categoria: 'Solicitação de serviço',
+                status: 'Novo',
+                urgencia: 'Baixa'
             })
         }
     }, [dados]);
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        const data = form;
+
+        try {
+            const response = await ticketService.create(data);
+
+            if (response.status == 201) {
+                console.log('deu');
+                navigate('/');
+            }
+        } catch (err) {
+            const errosApi = err.response?.data?.errors || {};
+            setErro(errosApi);
+            console.log('erros: ', erro);
+        }
+    }
 
     return (
         <div className="ligacaoFinalizada-page">
@@ -91,6 +118,7 @@ export default function LigacaoFinalizada() {
                                 type="button"
                                 text="Criando Solicitação em 5..."
                                 className="mt-6 w-1/2"
+                                onClick={handleSubmit}
                                 buttonClassName="w-full rounded-2xl"
                             />
                             <Button

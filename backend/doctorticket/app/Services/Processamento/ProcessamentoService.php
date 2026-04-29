@@ -20,6 +20,7 @@ class ProcessamentoService{
             {
             "titulo": "Solicitação Telefone - (Tipo da solicitação)",
             "assunto": "",
+            "descricaoAssunto": ""
             "solicitante": "",
             "unidade": ""
             }
@@ -44,6 +45,7 @@ class ProcessamentoService{
                 A sua avaliação é muito importante, se possível avalie o meu atendimento através da mensagem desse ticket. Obrigado!\n\n
             
             - "solicitante": nome da pessoa que iniciou a ligação
+            - "descricaoAssunto": breve descrição do problema da ligação
             - "unidade": cidade ou unidade da clínica mencionada (se não encontrar, retornar "Não informado")
 
             Variaveis:' . "
