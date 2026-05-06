@@ -7,6 +7,7 @@ import Relatorio from "../pages/Relatorio";
 import PrivateRoute from "./AppPrivateRoutes";
 import CadastroUsuarios from "../pages/CadastroUsuarios";
 import Configuracoes from "../pages/Configuracoes";
+import GravaAudio from "../pages/GravaAudio";
 
 export default function AppRoutes(){
     return(
@@ -19,6 +20,11 @@ export default function AppRoutes(){
                     <Route path="/" element={
                         <PrivateRoute>
                             <Inicio/>
+                        </PrivateRoute>
+                    }/>
+                    <Route path="/gravar" element={
+                        <PrivateRoute>
+                            <GravaAudio/>
                         </PrivateRoute>
                     }/>
                     <Route path="/ligacaoFinalizada" element={

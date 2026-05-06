@@ -26,7 +26,7 @@ export function Sidebar() {
           <span className="text-[10px] leading-none">Relatórios</span>
         </NavLink>
 
-        <NavLink to="/" className={linkClass}>
+        <NavLink to="/gravar" className={linkClass}>
           <UserIcon className="h-6 w-6" />
           <span className="text-[10px] leading-none">Perfil</span>
         </NavLink>
