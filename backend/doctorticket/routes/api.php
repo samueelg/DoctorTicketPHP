@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\TicketController;
 use Illuminate\Http\Request;
@@ -29,3 +30,5 @@ Route::middleware('auth:sanctum')->post('/ticket', [TicketController::class, 'sa
 /* Rotas de transcrição*/
 Route::middleware('auth:sanctum')->post('/transcrever', [TicketController::class, 'finalizaLigacao'])->name('finalizaLigacao');
 
+/* Rotas de relatórios */
+Route::middleware('auth:sanctum')->get('/relatorios/getTicketsChat', [RelatorioController::class, 'getRelatorioTicketsChats'])->name('relatorios.ticketsChat');

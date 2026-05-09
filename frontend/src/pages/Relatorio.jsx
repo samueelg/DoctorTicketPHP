@@ -1,8 +1,29 @@
 import Button from "../components/atoms/Button";
 import InputField from "../components/atoms/InputField";
 import { FunnelIcon } from "@heroicons/react/24/outline";
+import { relatorioService } from "../services/relatorioService";
+import { useState } from "react";
 
 export default function RelatorioBase(){
+    const [form, setForm] = useState({
+        data: "teste",
+        solicitante: "teste2"
+    });
+
+    async function buscarRelatorio(e){
+        e.preventDefault();
+
+        const data = form;
+
+        try {
+            const response = await relatorioService.getTicketsChat();
+
+            console.log(response.data)
+        } catch (err) {
+            console.log('erros: ', err);
+        }
+    }
+
     return (
         <div className="relatorio-base-page">
             <div className="min-h-screen bg-gray-50">
@@ -49,8 +70,9 @@ export default function RelatorioBase(){
                             <div className="grid grid-cols-4 py-2 gap-1">
                                 <div className="col-span-3">
                                 <Button
-                                    text={'Aplicar'}
+                                    text={'Buscar'}
                                     buttonClassName="w-full h-8 rounded-2xl shadow-sm"
+                                    onClick={(e) => buscarRelatorio(e)}
                                 />
                                 </div>
                                 <div className="col-span-1">
