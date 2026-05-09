@@ -7,16 +7,24 @@ use App\Models\Ticket;
 use App\Services\Processamento\ProcessamentoService;
 use App\Services\Transcricao\TranscricaoService;
 use Exception;
-use Illuminate\Support\Facades\Request;
 
 class TicketController extends Controller
 {
-    public function finalizaLigacao(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService){
-        $audioPath = public_path('audio/audio6.mp3');
-        
-        $transcricao = $transcricaoService->transcrever($audioPath);
+    private $oProcessamentoService;
+    private $oTranscricaoService;
 
-        $processamento = $processamentoService->processarDados($transcricao);
+    public function __construct(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService)
+    {
+        $this->oTranscricaoService   = $transcricaoService;
+        $this->oProcessamentoService = $processamentoService;
+    }
+
+    public function finalizaLigacao(){
+        $audio = request()->file('audio');
+
+        $transcricao = $this->oTranscricaoService->transcrever($audio);
+
+        $processamento = $this->oProcessamentoService->processarDados($transcricao);
 
         return $processamento;
     }
@@ -27,7 +35,7 @@ class TicketController extends Controller
 
             $ticket = Ticket::create([
                 'titulo' => $request->titulo,
-                'assunto' => $request->descricaoAssunto,
+                'assunto' => $request->assunto,
                 'data_conclusao' => $dataAtual,
                 'status' => $request->status,
                 'idUsuario' => $request->user()->id,

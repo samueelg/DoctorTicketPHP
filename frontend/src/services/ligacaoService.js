@@ -1,5 +1,5 @@
 import { api } from "./api";
 
 export const ligacaoService = {
-  transcrever: () => api.post('/transcrever')
+  transcrever: (formData) => api.post('/transcrever', formData)
 };

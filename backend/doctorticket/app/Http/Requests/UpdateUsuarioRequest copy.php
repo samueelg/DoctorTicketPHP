@@ -26,8 +26,8 @@ class UpdateUsuarioRequest extends FormRequest
 
         return [
             'nome' => ['required'],
-            'ramal' => ['required', Rule::unique('usuarios', 'ramal')->ignore($id)],
-            'email' => ['email', Rule::unique('usuarios', 'email')->ignore($id)],
+            'ramal' => ['required', Rule::unique('Usuario', 'ramal')->ignore($id)],
+            'email' => ['email', Rule::unique('Usuario', 'email')->ignore($id)],
             'senha' => ['required', 'min:8'],
             'tipo' => ['required']
         ];

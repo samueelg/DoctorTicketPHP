@@ -12,68 +12,88 @@ class ProcessamentoService{
 
         $prompt = '
             Você é um assistente especializado em atendimento de suporte de clínicas odontológicas da Oral Sin.
+            
+            A transcrição recebida será um resumo curto e informal gravado por um analista logo após encerrar uma ligação telefônica com o franqueado.
+            
+            A fala normalmente contém:
+            - tipo do problema
+            - nome do solicitante
+            - unidade
+            - breve resumo da solução aplicada
+            -nome do paciente(pode não conter)
 
-            Sua tarefa é analisar a transcrição de uma ligação e extrair informações estruturadas para criação de um chamado no Movidesk.
+            A transcrição pode conter:
+            - frases incompletas
+            - ausência de pontuação
+            - palavras abreviadas
+            - erros de fala ou transcrição
 
             Retorne APENAS um JSON válido no seguinte formato:
-
             {
             "titulo": "Solicitação Telefone - (Tipo da solicitação)",
             "assunto": "",
-            "descricaoAssunto": ""
             "solicitante": "",
-            "unidade": ""
+            "unidade": "",
             }
 
-            Regras:
-            - "titulo": "Solicitação Telefone - (resumo curto e claro do problema (máximo 10 palavras)"
-            - "assunto": Preencha as informaçẽos coletadas com base na seguinte estrutura:
-                Olá! Bom dia/Boa tarde!\n\n
+            Exemplo com resposta:
+            Transcrição:
+            "transferencia de paciente solicitante joao unidade londrina gleba palhano"
+
+            Resposta:
+            {
+            "titulo": "Solicitação Telefone - Transferência de paciente",
+            "assunto": "Olá! Bom dia...",
+            "descricaoAssunto": "Transferência de paciente entre unidades",
+            "acao": "Transferencia realizada conforme o solicitado"
+            "solicitante": "João",
+            "unidade": "Londrina Gleba Palhano",
+            }
+
+            O campo "assunto" deve seguir EXATAMENTE este template:
+                "Olá! Bom dia/Boa tarde!\n\n
 
                 Foi registrado a Solicitação por telefone ao SAF.\n\n
 
-                Dúvida/Solicitação: (Solicitação feita pelo franqueado, ou duvida referente ao sistema)\n\n
+                Dúvida/Solicitação: {descricaoAssunto}\n\n
 
-                Orientação/Solução: (Descreva de forma objetiva a ação realizada pelo analista para resolver a solicitação, siga essas regras: 1.Use frases curtas e diretas; 2.Descreva a ação concluída (ex: "Transferência de paciente realizada"); 3.Sempre escrever no passado. Exemplo de Respostas Validas: 1."Transferência de paciente realizada conforme solicitado"; 2."Auxílio na alteração de contrato atráves do AnyDesk"; 3."Contrato cancelado revertido durante a ligação") 
+                Orientação/Solução: {acao}\n\n 
 
-                Solicitante: (Se não houver, colocar: Não informado)\n\n
+                Solicitante: {solicitante}\n\n
 
-                Paciente: (Se não houver, colocar: Não informado)\n\n
+                Paciente: {paciente OU "Não Informado"}\n\n
 
-                Unidade: (Se não houver, colocar: Não informado)\n\n
+                Unidade: {unidade}\n\n
 
-                A sua avaliação é muito importante, se possível avalie o meu atendimento através da mensagem desse ticket. Obrigado!\n\n
-            
-            - "solicitante": nome da pessoa que iniciou a ligação
-            - "descricaoAssunto": breve descrição do problema da ligação
-            - "unidade": cidade ou unidade da clínica mencionada (se não encontrar, retornar "Não informado")
+                A sua avaliação é muito importante, se possível avalie o meu atendimento através da mensagem desse ticket. Obrigado!\n\n"
 
             Variaveis:' . "
             hora = {$horario}
             " . '
 
             Regras importantes:
+            - A transcrição podera vir no formato "Tipo da solicitação - Nome do Solicitante - Unidade - Paciente"
             - Se hora < 12, use "Bom dia" no assunto 
             - Se hora >= 12, use "Boa tarde"
-            - NÃO inventar informações
-            - Se não souber algum campo, usar "Não informado"
-            - Respeitar a estrutura do assunto, deixando no mesmo formato
-            - Corrigir pequenos erros de português da transcrição
-            - Entender contexto mesmo com fala informal
-            - Identificar o problema principal da ligação
 
-            Considere que os problemas mais comuns incluem:
-            -Transferencia de paciente entre unidades
-            -Ajuda para alteração de contrato
-            -Reverter paciente finalizado no sistema
-            -Reverter contrato cancelado
-            -Ajuda com agendamento de paciente
-            -Duvida sobre problema no sistema
+            Regras para "Orientação/Solução":
+            - usar frases curtas e diretas
+            - sempre escrever no passado
+            - descrever apenas ações concluídas
+
+            Exemplos válidos:
+            - "Transferência de paciente realizada conforme solicitado"
+            - "Auxílio na alteração de contrato através do AnyDesk"
+            - "Contrato cancelado revertido durante a ligação"     
+            
+            Responda apenas com JSON válido.
+            Não utilize markdown.
+            Não utilize blocos ```json.
+            Não adicione explicações.
             ' . "
             Transcrição:
             {{$transcricao}}
             " . '
-            Responda apenas com JSON válido, sem explicações adicionais.
         ';     
 
         $response = Http::timeout(300)

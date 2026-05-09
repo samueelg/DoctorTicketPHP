@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/layout/LoadingScreen";
 import { Toast } from "primereact/toast";
 import { MicrophoneIcon, StopIcon } from "@heroicons/react/24/outline";
+import { ligacaoService } from "../services/ligacaoService";
 
 export default function GravaAudio() {
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ export default function GravaAudio() {
   }
   
   async function iniciaGravacao(e) {
-    //TODO - Usar audio do servidor ao invés de audio local
     e.preventDefault();
 
     try {
@@ -41,12 +41,8 @@ export default function GravaAudio() {
 
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-        const url = URL.createObjectURL(blob);
 
-        console.log("Áudio gravado:", url);
-
-        // opcional: tocar
-        new Audio(url).play();
+        enviaAudio(blob);
 
         stream.getTracks().forEach(track => track.stop());
       };
@@ -64,27 +60,24 @@ export default function GravaAudio() {
       setRecording(false);
     }
   }
-    
 
-    // try {
-    //   const result = await ligacaoService.transcrever();
-    //   const data = result.data
+  async function enviaAudio(blob){
+    try{
+      const formData = new FormData();
+      formData.append('audio', blob, 'gravacao.webm');
 
-    //   if (result.status == 200) {
-    //     navigate('/ligacaoFinalizada', {
-    //       state: { data }
-    //     });
-    //   }
-    // } catch (error) {
-    //   navigate('/');
-    //   showToast('error', 'Erro', 'Ocorreu um erro ao processar a requisição!');
-    //   console.log(error);
-    // } finally {
-    //   setLoading(false);
-    // }
+      const response = await ligacaoService.transcrever(formData);
+      const data = response.data
 
-  async function finalizaGravacao(e){
-    setRecording(false);
+      if(response.status == 200){
+        navigate('/ligacaoFinalizada', {
+          state: { data }
+        });
+      }
+    }catch(err){
+      navigate('/');
+      console.log('Erro ao transcrever ligação: ', err);
+    }
   }
 
   return (
@@ -107,7 +100,13 @@ export default function GravaAudio() {
                   text=""
                   type="button"
                   variant="none"
-                  onClick={(isRecording)? finalizaGravacao : iniciaGravacao}
+                  onClick={(e) => {
+                    if(isRecording){
+                      finalizaGravacao();
+                    }else{
+                      iniciaGravacao(e);
+                    }
+                  }}
                   buttonClassName={`
                     ${isRecording ? "bg-red-600 animate-pulse" : "bg-black hover:scale-105"}
                     rounded-full

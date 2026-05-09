@@ -21,26 +21,7 @@ export default function Inicio() {
     }
   
   async function finalizaLigacao(e) {
-    //TODO - Usar audio do servidor ao invés de audio local
-    e.preventDefault();
-    setLoading(true);
-
-    try{
-      const result = await ligacaoService.transcrever();
-      const data = result.data
-
-      if(result.status == 200){
-        navigate('/ligacaoFinalizada', {
-          state: { data }
-        });
-      }
-    }catch(error){
-      navigate('/');
-      showToast('error', 'Erro', 'Ocorreu um erro ao processar a requisição!');
-      console.log(error);
-    }finally{
-      setLoading(false);
-    }
+    //Implementar método de finalizaLigacao, que é acionado ao coletar evento de ramal atendido
   }
 
 return (
@@ -60,12 +41,6 @@ return (
           <p className="text-lg text-gray-600">Aguardando Ligação...</p>
         </div>
       </div>
-            <Button
-              type="button"
-              text="Enviar Audio"
-              variant="green"
-              onClick={finalizaLigacao}
-            />
     </div>
   </div>
 );
