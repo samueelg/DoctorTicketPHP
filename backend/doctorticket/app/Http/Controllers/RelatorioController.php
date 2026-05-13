@@ -15,13 +15,11 @@ class RelatorioController extends Controller
     }
 
     /* Relatório responsavel por extrair os ticket abertos por CHAT WhatsApp Business */
-    public function getRelatorioTicketsChats(Request $filtros){
-        $mockFilter = [
-            'data' => '2026-01-01',
-            'solicitante' => 'Samuel',
-        ];
-
-        $tickets = $this->oRelatorioService->getTicketsChat($mockFilter);
+    public function getRelatorioTicketsChats(Request $request){
+        $filtros = $request->all();
+        Log::info('filtros: ', $filtros);
+        
+        $tickets = $this->oRelatorioService->getTicketsChat($filtros);
         
         return $tickets;
     }
