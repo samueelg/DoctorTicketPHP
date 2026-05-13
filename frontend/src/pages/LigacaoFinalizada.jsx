@@ -15,6 +15,7 @@ export default function LigacaoFinalizada() {
         titulo: "",
         assunto: "",
         solicitante: "",
+        unidade: "",
         categoria: "",
         status: "",
         urgencia: ""
@@ -25,8 +26,8 @@ export default function LigacaoFinalizada() {
             setForm({
                 titulo: dados.titulo,
                 assunto: dados.assunto,
-                descricaoAssunto: dados.descricaoAssunto,
                 solicitante: dados.solicitante,
+                unidade: dados.unidade,
                 categoria: 'Solicitação de serviço',
                 status: 'Novo',
                 urgencia: 'Baixa'
@@ -40,10 +41,13 @@ export default function LigacaoFinalizada() {
         const data = form;
 
         try {
+            //Cria o ticket
+            console.log('formData send: ', data);
+
             const response = await ticketService.create(data);
 
             if (response.status == 201) {
-                console.log('deu');
+                //Retorna para o inicio
                 navigate('/');
             }
         } catch (err) {
@@ -116,7 +120,7 @@ export default function LigacaoFinalizada() {
                         <div className="flex w-full gap-2 justify-end">
                             <Button
                                 type="button"
-                                text="Criando Solicitação em 5..."
+                                text="Criar solicitação"
                                 className="mt-6 w-1/2"
                                 onClick={handleSubmit}
                                 buttonClassName="w-full rounded-2xl"

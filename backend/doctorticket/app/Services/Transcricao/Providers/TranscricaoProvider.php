@@ -2,6 +2,8 @@
 
 namespace App\Services\Transcricao\Providers;
 
+use Illuminate\Http\UploadedFile;
+
 interface TranscricaoProvider {
-    public function transcrever(string $caminhoAudio): string;
+    public function transcrever(UploadedFile $audio): string;
 }

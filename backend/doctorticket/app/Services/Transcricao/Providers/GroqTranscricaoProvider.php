@@ -4,9 +4,10 @@ namespace App\Services\Transcricao\Providers;
 
 use Illuminate\Support\Facades\Http;
 use App\Services\Transcricao\Providers\TranscricaoProvider;
+use Illuminate\Http\UploadedFile;
 
 class GroqTranscricaoProvider implements TranscricaoProvider {
-    public function transcrever(string $caminhoAudio): string {
+    public function transcrever(UploadedFile $audio): string {
         $apiKey = env('GROQ_API_KEY');
         
         $response = Http::timeout(300)
@@ -15,8 +16,8 @@ class GroqTranscricaoProvider implements TranscricaoProvider {
             ])
             ->attach(
                 'file',
-                file_get_contents($caminhoAudio),
-                basename($caminhoAudio)
+                file_get_contents($audio->getPathname()),
+                $audio->getClientOriginalName()
             )
             ->post('https://api.groq.com/openai/v1/audio/transcriptions', [
                 'model' => 'whisper-large-v3',

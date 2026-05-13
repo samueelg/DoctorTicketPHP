@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('assunto');
             $table->date('data_conclusao')->nullable(true);
             $table->string('status');
-            $table->foreignId('idUsuario')->constrained('usuarios')->onDelete('cascade');
+            $table->foreignId('idUsuario')->constrained('Usuario')->onDelete('cascade');
             $table->string('categoria');
             $table->string('solicitante');
             $table->string('urgencia');

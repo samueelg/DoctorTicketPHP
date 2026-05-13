@@ -12,7 +12,7 @@ class TranscricaoService
         $this->provider = $provider;
     }
 
-    public function transcrever($audioPath) {
-        return $this->provider->transcrever($audioPath);
+    public function transcrever($audio) {
+        return $this->provider->transcrever($audio);
     }
 }

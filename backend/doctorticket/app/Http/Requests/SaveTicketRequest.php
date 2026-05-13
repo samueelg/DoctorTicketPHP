@@ -27,7 +27,9 @@ class SaveTicketRequest extends FormRequest
             'solicitante'=>['required', 'string','max:128'],
             'categoria'=>['required', 'string','max:128'],
             'urgencia'=>['required', 'string', 'max:128'],
-            'status' => ['required', 'string','max:128'],        ];
+            'status' => ['required', 'string','max:128'],
+            'unidade' => ['required', 'string',]
+        ];
     }
 
     public function messages(): array
@@ -39,6 +41,7 @@ class SaveTicketRequest extends FormRequest
             'categoria.required'    => 'É necessário preencher o campo categoria',
             'urgencia.required'     => 'É necessário preencher o campo urgência',
             'status.required'       => 'É necessário preencher o campo status',
+            'unidade.required'      => 'É necessário preencher o campo Unidade',
         ];
     }
 }
