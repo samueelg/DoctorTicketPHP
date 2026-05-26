@@ -4,7 +4,6 @@ namespace App\Services\Relatorio;
 
 use DateTime;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class RelatorioService{
     public function getTicketsChat($filtros){

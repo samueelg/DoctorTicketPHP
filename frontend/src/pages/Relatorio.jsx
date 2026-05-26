@@ -121,7 +121,8 @@ export default function RelatorioBase(){
                                 <Calendar 
                                     id="dataBusca"
                                     value={form.data} 
-                                    onChange={(e) => setForm({ data: e.value, filtro: form.filtro})} 
+                                    onChange={(e) => setForm({ data: e.value, filtro: form.filtro})}
+                                    placeholder="dd/mm/aaaa - dd/mm/aaaa" 
                                     selectionMode="range" 
                                     locale="pt-BR"
                                     dateFormat="dd/mm/yy" 

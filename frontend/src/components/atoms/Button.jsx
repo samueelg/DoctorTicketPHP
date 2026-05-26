@@ -9,6 +9,7 @@ export default function Button({
     variant = "green",
     icon = null,
     iconPos = "left",
+    children,
 }) {
     const variants = {
         green: "text-white bg-green-600 hover:bg-green-700 focus:ring-green-500",
@@ -32,6 +33,8 @@ export default function Button({
             {icon && iconPos === "left" && icon}
                 {text}
             {icon && iconPos === "right" && icon}
+
+            {children}
             </button>
         </div>
     );
