@@ -6,11 +6,11 @@ import UserData from "../../components/layout/UserData";
 export default function AppLayout(){
     return (
     <div className="flex h-screen">
-        <Notificacao/>
         <Sidebar />
         <main className="flex-1 overflow-auto">
             <Outlet />
         </main>
+            <Notificacao/>
 
         <UserData/>
     </div>

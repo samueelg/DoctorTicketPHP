@@ -26,6 +26,10 @@ class Usuario extends Authenticatable
         return $this->senha;
     }
 
+    public function notificacoes(){
+        $this->hasMany(Notificacao::class, 'idUsuario');
+    }
+
     protected $hidden = [
         'senha',
     ];
