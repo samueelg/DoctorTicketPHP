@@ -3,15 +3,14 @@
 namespace App\Events;
 
 use App\Models\Notificacao;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Queue\SerializesModels;
 
-class NotificacaoCriada implements ShouldBroadcast
+class NotificacaoCriada implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -29,8 +28,24 @@ class NotificacaoCriada implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel(
+        //Ajustar depois pra private
+        return new Channel(
             'usuario.' . $this->notificacao->idUsuario
         );
+    }
+
+    public function broadcastAs()
+    {
+        return 'notificacao.criada';
+    }
+
+    public function broadcastWith()
+    {
+        //Ajustar retorno correto do payload
+        return [
+            'id' => $this->notificacao->idNotificacao,
+            'titulo' => $this->notificacao->titulo,
+            'mensagem' => $this->notificacao->mensagem,
+        ];
     }
 }

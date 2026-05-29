@@ -8,9 +8,7 @@ import Tailwind from "primereact/passthrough/tailwind";
 import "./global.css"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
     <PrimeReactProvider value={{ pt: Tailwind }}>
       <App />
     </PrimeReactProvider>
-  </React.StrictMode>
 );

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveTicketRequest;
 use App\Models\Ticket;
+use App\Services\Notificacao\NotificacaoService;
 use App\Services\Processamento\ProcessamentoService;
 use App\Services\Transcricao\TranscricaoService;
 use Exception;
@@ -12,11 +13,13 @@ class TicketController extends Controller
 {
     private $oProcessamentoService;
     private $oTranscricaoService;
+    private $oNotificacaoService;
 
-    public function __construct(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService)
+    public function __construct(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService, NotificacaoService $notificacaoService)
     {
         $this->oTranscricaoService   = $transcricaoService;
         $this->oProcessamentoService = $processamentoService;
+        $this->oNotificacaoService   = $notificacaoService;
     }
 
     public function finalizaLigacao(){
@@ -56,6 +59,12 @@ class TicketController extends Controller
                 'message' => 'Erro ao criar ticket',
             ], 500);
         }
+    }
+
+    public function criaNotificacao(){
+        $this->oNotificacaoService->criarNotificacao();
+
+        return response()->json(['message' => 'Sucesso!']);
     }
 
 }

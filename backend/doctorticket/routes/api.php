@@ -23,12 +23,14 @@ Route::middleware('auth:sanctum')->post('/usuarios', [UsuarioController::class, 
 Route::middleware('auth:sanctum')->patch('/usuarios/{user}', [UsuarioController::class, 'editUsuario'])->name('usuarios.edit');
 Route::middleware('auth:sanctum')->delete('/usuarios/{user}', [UsuarioController::class, 'removeUsuario'])->name('usuarios.delete');
 
-/* Rotas de Usuários */
+/* Rotas de Ticket */
 Route::middleware('auth:sanctum')->post('/ticket', [TicketController::class, 'salvarTicket'])->name('ticket.create');
-
+/* Rotas de notificação */
+Route::middleware('auth:sanctum')->post('/notificacao', [TicketController::class, 'criaNotificacao'])->name('ticket.notificacao');
 
 /* Rotas de transcrição*/
 Route::middleware('auth:sanctum')->post('/transcrever', [TicketController::class, 'finalizaLigacao'])->name('finalizaLigacao');
 
 /* Rotas de relatórios */
 Route::middleware('auth:sanctum')->get('/relatorios/getTicketsChat', [RelatorioController::class, 'getRelatorioTicketsChats'])->name('relatorios.ticketsChat');
+

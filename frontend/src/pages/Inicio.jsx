@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
 import { PhoneIcon } from "@heroicons/react/24/solid";
 import Button from "../components/atoms/Button";
-import { ligacaoService } from "../services/ligacaoService";
 import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/layout/LoadingScreen";
 import { Toast } from "primereact/toast";
+import { notificacaoService } from "../services/notificacaoService";
+
 
 export default function Inicio() {
   const navigate = useNavigate();
@@ -20,8 +21,13 @@ export default function Inicio() {
         });
     }
   
-  async function finalizaLigacao(e) {
+  async function criarNotificacao(e) {
     //Implementar método de finalizaLigacao, que é acionado ao coletar evento de ramal atendido
+    console.log('entrou');
+
+    const response = await notificacaoService.create();
+
+    console.log('response', response);
   }
 
 return (
@@ -34,13 +40,22 @@ return (
       {/* Conteúdo central */}
       <main className="flex-1"></main>
 
-      {/* Overlay central */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="flex flex-col items-center gap-3">
-          <PhoneIcon className="h-28 w-28 text-gray-800" />
-          <p className="text-lg text-gray-600">Aguardando Ligação...</p>
-        </div>
-      </div>
+<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+  <div className="pointer-events-auto flex flex-col items-center gap-3">
+
+    <PhoneIcon className="h-28 w-28 text-gray-800" />
+
+    <p className="text-lg text-gray-600">
+      Aguardando Ligação...
+    </p>
+
+    <Button
+      text={'Dispara Notificação'}
+      onClick={criarNotificacao}
+    />
+
+  </div>
+</div>
     </div>
   </div>
 );
