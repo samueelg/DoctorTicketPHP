@@ -13,12 +13,12 @@ class UsuarioController extends Controller
 {
     public function getDadosUsuario(Request $request)
     {
-        $user = $request->user();
+        $usuario = $request->user();
 
         return response()->json([
-            'id' => $user->id,
-            'nome' => $user->nome,
-            'ramal' => $user->ramal,
+            'id' => $usuario->id,
+            'nome' => $usuario->nome,
+            'ramal' => $usuario->ramal,
         ]);
     }
 
@@ -46,7 +46,7 @@ class UsuarioController extends Controller
     public function saveUsuario(SaveUsuarioRequest $request)
     {
         try {
-            $user = Usuario::create([
+            $usuario = Usuario::create([
                 'nome'  => $request->nome,
                 'ramal' => $request->ramal,
                 'email' => $request->email,
@@ -58,11 +58,11 @@ class UsuarioController extends Controller
             return response()->json([
                 'message' => 'Usuário criado com sucesso',
                 'data' => [
-                    'id' => $user->id,
-                    'nome' => $user->nome,
-                    'email' => $user->email,
-                    'ramal' => $user->ramal,
-                    'tipo' => $user->tipo,
+                    'id' => $usuario->id,
+                    'nome' => $usuario->nome,
+                    'email' => $usuario->email,
+                    'ramal' => $usuario->ramal,
+                    'tipo' => $usuario->tipo,
                 ],
             ], 201);
         } catch (Exception $e) {

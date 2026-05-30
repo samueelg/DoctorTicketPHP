@@ -43,7 +43,7 @@ class NotificacaoCriada implements ShouldBroadcastNow
     {
         //Ajustar retorno correto do payload
         return [
-            'id' => $this->notificacao->idNotificacao,
+            'id' => $this->notificacao->id,
             'titulo' => $this->notificacao->titulo,
             'mensagem' => $this->notificacao->mensagem,
         ];

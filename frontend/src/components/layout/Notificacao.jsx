@@ -4,6 +4,7 @@ import Button from "../atoms/Button";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { useEffect, useRef, useState } from "react";
 import echo from "../../services/echo";
+import { notificacaoService } from "../../services/notificacaoService";
 
 export function Notificacao() {
     const op = useRef(null);
@@ -14,14 +15,24 @@ export function Notificacao() {
     }
 
     useEffect(() => {
+    
+    async function carregarNotificacoes() {
+        try {
+
+            const response = await notificacaoService.listar();
+
+            setNotificacoes(response.data);
+
+        } catch (error) {
+            console.error('Erro ao carregar notificações', error);
+        }
+    }
+
+    carregarNotificacoes();
+
         //Ajstar depois para private e para ecutar o usuário da sessão
         echo.channel('usuario.1')
             .listen('.notificacao.criada', (e) => {
-
-                console.log('NOTIFICAÇÃO RECEBIDA');
-
-                console.log(e);
-
                 setNotificacoes(prev => [
                     e,
                     ...prev

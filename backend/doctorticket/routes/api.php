@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotificacaoController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\TicketController;
@@ -26,7 +27,8 @@ Route::middleware('auth:sanctum')->delete('/usuarios/{user}', [UsuarioController
 /* Rotas de Ticket */
 Route::middleware('auth:sanctum')->post('/ticket', [TicketController::class, 'salvarTicket'])->name('ticket.create');
 /* Rotas de notificação */
-Route::middleware('auth:sanctum')->post('/notificacao', [TicketController::class, 'criaNotificacao'])->name('ticket.notificacao');
+Route::middleware('auth:sanctum')->post('/notificacao', [TicketController::class, 'criaNotificacao'])->name('notificacao.criar');
+Route::middleware('auth:sanctum')->get('/notificacao', [NotificacaoController::class, 'getNotificacoes'])->name('notificacao.get');
 
 /* Rotas de transcrição*/
 Route::middleware('auth:sanctum')->post('/transcrever', [TicketController::class, 'finalizaLigacao'])->name('finalizaLigacao');

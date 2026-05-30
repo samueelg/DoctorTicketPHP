@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UpdateUsuarioRequest extends FormRequest
@@ -23,11 +24,11 @@ class UpdateUsuarioRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->route('user')->id;
-
+        
         return [
             'nome' => ['required'],
-            'ramal' => ['required', Rule::unique('Usuario', 'ramal')->ignore($id)],
-            'email' => ['email', Rule::unique('Usuario', 'email')->ignore($id)],
+            'ramal' => ['required', Rule::unique('usuario', 'ramal')->ignore($id)],
+            'email' => ['email', Rule::unique('usuario', 'email')->ignore($id)],
             'senha' => ['required', 'min:8'],
             'tipo' => ['required']
         ];

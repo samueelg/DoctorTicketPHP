@@ -11,7 +11,7 @@ class Usuario extends Authenticatable
 {
     use HasApiTokens;
 
-    protected $table = 'Usuario';
+    protected $table = 'usuario';
     protected $fillable = [
         'nome',
         'ramal',

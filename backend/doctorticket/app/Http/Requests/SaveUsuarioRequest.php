@@ -23,8 +23,8 @@ class SaveUsuarioRequest extends FormRequest
     {
         return [
             'nome' => ['required'],
-            'ramal' => ['required', 'unique:Usuario,ramal'],
-            'email' => ['email', 'unique:Usuario,email'],
+            'ramal' => ['required', 'unique:usuario,ramal'],
+            'email' => ['email', 'unique:usuario,email'],
             'senha' => ['required', 'min:8'],
             'tipo' => ['required']
         ];
