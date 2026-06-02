@@ -23,11 +23,7 @@ export default function Inicio() {
   
   async function criarNotificacao(e) {
     //Implementar método de finalizaLigacao, que é acionado ao coletar evento de ramal atendido
-    console.log('entrou');
-
     const response = await notificacaoService.create();
-
-    console.log('response', response);
   }
 
 return (

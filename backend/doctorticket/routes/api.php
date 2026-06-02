@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->post('/ticket', [TicketController::class, 'sa
 /* Rotas de notificação */
 Route::middleware('auth:sanctum')->post('/notificacao', [TicketController::class, 'criaNotificacao'])->name('notificacao.criar');
 Route::middleware('auth:sanctum')->get('/notificacao', [NotificacaoController::class, 'getNotificacoes'])->name('notificacao.get');
+Route::middleware('auth:sanctum')->patch('/notificacao/{notificacao}', [NotificacaoController::class, 'lerNotificacao'])->name('notificacao.patch');
 
 /* Rotas de transcrição*/
 Route::middleware('auth:sanctum')->post('/transcrever', [TicketController::class, 'finalizaLigacao'])->name('finalizaLigacao');

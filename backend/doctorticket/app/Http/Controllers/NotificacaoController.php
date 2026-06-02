@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notificacao;
 use App\Services\Notificacao\NotificacaoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class NotificacaoController extends Controller
 {
@@ -16,5 +16,9 @@ class NotificacaoController extends Controller
     
     public function getNotificacoes(Request $request){
         return $this->oNotificacaoService->getNotificacoes($request);
+    }
+
+    public function lerNotificacao(Notificacao $notificacao){
+        return $this->oNotificacaoService->lerNotificacaoUsuario($notificacao);
     }
 }

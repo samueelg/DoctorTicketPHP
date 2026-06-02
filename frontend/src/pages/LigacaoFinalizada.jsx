@@ -42,8 +42,6 @@ export default function LigacaoFinalizada() {
 
         try {
             //Cria o ticket
-            console.log('formData send: ', data);
-
             const response = await ticketService.create(data);
 
             if (response.status == 201) {

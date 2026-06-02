@@ -27,7 +27,7 @@ class Usuario extends Authenticatable
     }
 
     public function notificacoes(){
-        $this->hasMany(Notificacao::class, 'idUsuario');
+        return $this->hasMany(Notificacao::class, 'idUsuario');
     }
 
     protected $hidden = [

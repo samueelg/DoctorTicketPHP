@@ -6,6 +6,8 @@ use App\Events\NotificacaoCriada;
 use Illuminate\Support\Facades\Event;
 use App\Models\Notificacao;
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class NotificacaoService{
     public function criarNotificacao(){
@@ -19,15 +21,55 @@ class NotificacaoService{
     Event::dispatch(new NotificacaoCriada($notificacao));
     }
 
-    public function getNotificacoes($request){
+    public function getNotificacoes(Request $request){
         try{
-        $notificacao = Notificacao::whereNull('lida_em')
-            ->where('idUsuario', $request->user()->id)
+        $notificacoes = Notificacao::where('idUsuario', $request->user()->id)
             ->get();
 
-        return $notificacao;
+        $qtdeNaoLida = 0;
+
+        forEach($notificacoes as $notificacao){
+            if(!$notificacao->lida_em){
+                $qtdeNaoLida++;
+            }
+        }
+
+        return response()->json([
+            'data' => $notificacoes,
+            'qtdeNaoLida' => $qtdeNaoLida
+        ]);
         }catch(Exception $e){
-            
+            Log::info(['Erro ao listar notificações! ' => $e]);
+
+            return response()->json([
+                'message' => $e,
+                'success' => false
+            ]);
+        }
+    }
+
+    public function lerNotificacaoUsuario(Notificacao $notificacao){
+        try{
+            $notificacao->update([
+                'lida_em'  => date('Y-m-d H:i:s'),
+            ]);
+
+            return response()->json([
+                'message' => 'Notificação lida com sucesso',
+                'success' => true,
+                'data' => [
+                    'id' => $notificacao->id,
+                    'titulo' => $notificacao->titulo,
+                    'mensagem' => $notificacao->mensagem
+                ],
+            ]);
+        }catch(Exception $e){
+            Log::info(['Erro ao ler notificação!' => $e]);
+
+            return response()->json([
+                'message' => $e,
+                'success' => false
+            ]);
         }
     }
 }

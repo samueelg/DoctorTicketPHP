@@ -9,24 +9,45 @@ import { notificacaoService } from "../../services/notificacaoService";
 export function Notificacao() {
     const op = useRef(null);
     const [notificacoes, setNotificacoes] = useState([]);
+    const [erro, setErro] = useState();
+    const qtdeNotificacoes = notificacoes.filter(n => !n.lida_em).length;
 
     function abreOverlay(e) {
         op.current?.toggle(e);
     }
 
-    useEffect(() => {
-    
+    async function lerNotificacao(notificacao){
+        try{
+            if(notificacao.lida_em){
+                return;
+            }
+
+            const response = await notificacaoService.ler(notificacao.id)
+
+            if(response.status == 200 && response.data.success){
+                carregarNotificacoes();
+            }
+
+        }catch(err){
+            setErro(err);
+            console.log(err)
+        }
+    }
+
     async function carregarNotificacoes() {
         try {
 
             const response = await notificacaoService.listar();
 
-            setNotificacoes(response.data);
+            setNotificacoes(response.data.data);
 
         } catch (error) {
+            setErro(error);
             console.error('Erro ao carregar notificações', error);
         }
     }
+
+    useEffect(() => {
 
     carregarNotificacoes();
 
@@ -51,11 +72,14 @@ export function Notificacao() {
                 icon={<BellIcon className="h-8 w-8" />}
                 onClick={abreOverlay}
             >
+            
+            {(qtdeNotificacoes > 0) ?
             <Badge
                 className="!text-xs !min-w-5 !h-5 flex items-center justify-center pointer-events-none"
                 severity="danger"
-                value="2"
+                value={qtdeNotificacoes}
             />
+            : ''}
             </Button>
 
             <OverlayPanel
@@ -78,12 +102,34 @@ export function Notificacao() {
         {/* Lista com scroll */}
         <div className="divide-y max-h-80 overflow-y-auto">
 
-            {notificacoes.map((n, index) => (
-                <div key={index}>
-                    <h3>{n.titulo}</h3>
-                    <p>{n.mensagem}</p>
-                </div>
-            ))}
+                        {notificacoes.map((n, index) => (
+                            <div key={index} onClick={() => lerNotificacao(n)}>
+                                <button className="w-full text-left px-3 py-3 hover:bg-gray-50 transition">
+                                    <div className={n.lida_em ? "" : "flex gap-2"}>
+                                        {!n.lida_em && (
+                                            <div className="w-2 h-2 rounded-full bg-gray-900 mt-1.5 shrink-0" />
+                                        )}
+
+                                        <div>
+                                            <p className="text-sm font-medium text-gray-900">
+                                                {n.titulo}
+                                            </p>
+
+                                            <p
+                                                className={`text-sm ${n.lida_em ? "text-gray-500" : "text-blue-500"
+                                                    }`}
+                                            >
+                                                {n.mensagem}
+                                            </p>
+
+                                            <span className="text-xs text-gray-400">
+                                                {n.tempo}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        ))}
 
         </div>
     </div>
