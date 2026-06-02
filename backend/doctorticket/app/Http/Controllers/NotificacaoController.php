@@ -21,4 +21,8 @@ class NotificacaoController extends Controller
     public function lerNotificacao(Notificacao $notificacao){
         return $this->oNotificacaoService->lerNotificacaoUsuario($notificacao);
     }
+
+    public function removerNotificacao(Notificacao $notificacao){
+        return $this->oNotificacaoService->removerNotificacao($notificacao);
+    }
 }

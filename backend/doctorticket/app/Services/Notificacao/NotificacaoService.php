@@ -48,6 +48,19 @@ class NotificacaoService{
         }
     }
 
+    public function removerNotificacao(Notificacao $notificacao){
+        try{
+            $notificacao->delete();
+
+            return response()->json([
+                'message' => 'Notificação removida com sucesso!',
+                'success' => true
+            ]);
+        }catch(Exception $e){
+            Log::info(['Erro ao remover notificação' => $e]);
+        }
+    }
+
     public function lerNotificacaoUsuario(Notificacao $notificacao){
         try{
             $notificacao->update([

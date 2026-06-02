@@ -1,4 +1,4 @@
-import { BellIcon } from "@heroicons/react/24/outline";
+import { BellIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Badge } from 'primereact/badge';
 import Button from "../atoms/Button";
 import { OverlayPanel } from "primereact/overlaypanel";
@@ -31,6 +31,22 @@ export function Notificacao() {
         }catch(err){
             setErro(err);
             console.log(err)
+        }
+    }
+
+    async function removeNotificacao(notificacao){
+        try{
+            const idNotificacao = notificacao.id;
+
+            //TODO - Adicionar debounce para enviar varias de uma vez
+            const response = await notificacaoService.remover(idNotificacao);
+
+            if(response.status == 200){
+                carregarNotificacoes();
+            }
+        }catch(error){
+            setErro(error);
+            console.log(error);
         }
     }
 
@@ -104,16 +120,23 @@ export function Notificacao() {
 
                         {notificacoes.map((n, index) => (
                             <div key={index} onClick={() => lerNotificacao(n)}>
-                                <button className="w-full text-left px-3 py-3 hover:bg-gray-50 transition">
+                                <button className="w-full text-left px-3 py-1 hover:bg-gray-50 transition">
                                     <div className={n.lida_em ? "" : "flex gap-2"}>
                                         {!n.lida_em && (
                                             <div className="w-2 h-2 rounded-full bg-gray-900 mt-1.5 shrink-0" />
                                         )}
 
                                         <div>
+                                            <div className="flex justify-between items-center">
                                             <p className="text-sm font-medium text-gray-900">
                                                 {n.titulo}
                                             </p>
+                                            <Button
+                                                icon={<XCircleIcon className="h-5 w-5"/>}
+                                                variant="none"
+                                                onClick={() => removeNotificacao(n)}
+                                            />
+                                            </div>
 
                                             <p
                                                 className={`text-sm ${n.lida_em ? "text-gray-500" : "text-blue-500"
