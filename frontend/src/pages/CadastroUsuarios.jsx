@@ -7,9 +7,9 @@ import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import Button from "../components/atoms/Button";
 import { usuariosService } from '../services/usuarioService';
-import { Toast } from 'primereact/toast';
 import { useRef } from 'react';
 import UserModal from '../components/organisms/UserModal'
+import { useToast } from "../components/context/ToastContext";
 
 
 export default function CadastroUsuarios(){
@@ -20,7 +20,7 @@ export default function CadastroUsuarios(){
     const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
     const [mode, setMode] = useState('create');
     const [loading, setLoading]   = useState(true);
-    const toast = useRef(null);
+    const { showToast } = useToast();
     const [formData, setFormData] = useState({
         nome: "",
         email: "",
@@ -40,15 +40,6 @@ export default function CadastroUsuarios(){
     useEffect(() => {
         getUsuarios();
     },[]);
-
-    function showToast(tipo, titulo, mensagem){
-        toast.current.show({
-            severity: tipo,
-            summary: titulo,
-            detail: mensagem,
-            life: 3000
-        });
-    }
 
     //Reseta os dados e fecha a modal
     function handleCloseModal() {
@@ -216,7 +207,6 @@ export default function CadastroUsuarios(){
 
     return (
         <div className="cadastro-page">
-             <Toast ref={toast} />
             <div className="min-h-screen bg-gray-50">
                 <div className="mx-auto w-full max-w-4xl px-6 p-6 min-h-screen flex flex-col justify-center">
                     <div className="mb-6 flex justify-between">

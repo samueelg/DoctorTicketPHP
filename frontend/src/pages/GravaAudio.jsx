@@ -14,15 +14,6 @@ export default function GravaAudio() {
   const toast = useRef(null);
   const chunksRef = useRef([]);
   
-  function showToast(tipo, titulo, mensagem) {
-    toast.current.show({
-      severity: tipo,
-      summary: titulo,
-      detail: mensagem,
-      life: 3000
-    });
-  }
-  
   async function iniciaGravacao(e) {
     e.preventDefault();
 

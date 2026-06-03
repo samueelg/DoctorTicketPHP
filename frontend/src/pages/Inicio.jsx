@@ -10,16 +10,7 @@ import { notificacaoService } from "../services/notificacaoService";
 export default function Inicio() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const toast = useRef(null);
 
-    function showToast(tipo, titulo, mensagem){
-        toast.current.show({
-            severity: tipo,
-            summary: titulo,
-            detail: mensagem,
-            life: 3000
-        });
-    }
   
   async function criarNotificacao(e) {
     //Implementar método de finalizaLigacao, que é acionado ao coletar evento de ramal atendido
@@ -29,7 +20,6 @@ export default function Inicio() {
 return (
   
   <div className="inicio-page">
-    <Toast ref={toast} />
     <LoadingScreen visible={loading} />
     <div className="flex w-full h-screen relative">
 

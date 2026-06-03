@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Sidebar } from "../../components/layout/Sidebar";
 import { Notificacao } from "../../components/layout/Notificacao";
 import UserData from "../../components/layout/UserData";
+import { ToastProvider } from "../../components/context/ToastContext";
 
 export default function AppLayout(){
     return (
