@@ -36,6 +36,7 @@ return (
     </p>
 
     <Button
+      className="hidden"
       text={'Dispara Notificação'}
       onClick={criarNotificacao}
     />
