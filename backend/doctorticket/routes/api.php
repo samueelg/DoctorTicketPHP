@@ -36,5 +36,5 @@ Route::middleware('auth:sanctum')->delete('/notificacao/{notificacao}', [Notific
 Route::middleware('auth:sanctum')->post('/transcrever', [TicketController::class, 'finalizaLigacao'])->name('finalizaLigacao');
 
 /* Rotas de relatórios */
-Route::middleware('auth:sanctum')->get('/relatorios/getTicketsChat', [RelatorioController::class, 'getRelatorioTicketsChats'])->name('relatorios.ticketsChat');
-
+Route::middleware('auth:sanctum')->get('/relatorio', [RelatorioController::class, 'getRelatorio'])->name('relatorio.get');
+Route::middleware('auth:sanctum')->get('/relatorios/exportarRelatorio', [RelatorioController::class, 'geraArquivoExportacao'])->name('relatorios.exportar');

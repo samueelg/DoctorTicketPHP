@@ -1,7 +1,7 @@
 import Button from "../components/atoms/Button";
 import Select from "../components/atoms/Select";
 import InputField from "../components/atoms/InputField";
-import { FunnelIcon } from "@heroicons/react/24/outline";
+import { DocumentIcon, FunnelIcon, TableCellsIcon } from "@heroicons/react/24/outline";
 import { relatorioService } from "../services/relatorioService";
 import { Calendar } from 'primereact/calendar';
 import { useState } from "react";
@@ -101,6 +101,36 @@ export default function RelatorioBase(){
         }
     }
 
+    async function exportarRelatorio(dados, tipo) {
+        if (tipo == 'excel') {
+            const data = {
+                data: form.data.map(d => d.toISOString()),
+                filtro: form.filtro,
+                tipo: tipo,
+            }
+
+            const response = await relatorioService.exportarRelatorio(data)
+
+            const blob = new Blob([
+                response.data
+            ], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+
+            const url = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'relatorio.xlsx';
+
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+
+            window.URL.revokeObjectURL(url);
+        }
+    }
+
     return (
         <div className="relatorio-base-page">
             <div className="min-h-screen bg-gray-50">
@@ -177,8 +207,21 @@ export default function RelatorioBase(){
 
                         {mostraResultados && (
                         <section className="rounded-2xl p-3 bg-white shadow-sm">
-                            <div className="mb-4">
+                            <div className="mb-4 flex justify-between">
                                 <h1 className="text-xl">Dados Encontrados</h1>
+                                <div className="gap-2 flex">
+                                    <Button
+                                        icon={<TableCellsIcon  className="h-5 w-5"/>}
+                                        text={'Excel'}
+                                        buttonClassName="rounded-2xl p-1.5 bg-blue-300 hover:bg-blue-500"
+                                        onClick={() => exportarRelatorio(resultado, 'excel')}
+                                    />
+                                    <Button
+                                        icon={<DocumentIcon  className="h-5 w-5"/>}
+                                        text={'PDF'}
+                                        buttonClassName="rounded-2xl p-1.5 bg-green-400"
+                                    />
+                                </div>
                             </div>
                         
                         <div className="" id="tickets">
