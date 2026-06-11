@@ -102,33 +102,42 @@ export default function RelatorioBase(){
     }
 
     async function exportarRelatorio(dados, tipo) {
-        if (tipo == 'excel') {
             const data = {
                 data: form.data.map(d => d.toISOString()),
                 filtro: form.filtro,
                 tipo: tipo,
             }
 
-            const response = await relatorioService.exportarRelatorio(data)
+            const response = await relatorioService.exportarRelatorio(data);
+
+            const mimeType = {
+                excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                pdf: 'application/pdf'
+            };
+
+
+            const extensao = {
+                excel: 'xlsx',
+                pdf: 'pdf'
+            };
 
             const blob = new Blob([
                 response.data
             ], {
-                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                type: mimeType[tipo]
             });
 
             const url = window.URL.createObjectURL(blob);
 
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'relatorio.xlsx';
+            link.download = `relatorio.${extensao[tipo]}`;
 
             document.body.appendChild(link);
             link.click();
             link.remove();
 
             window.URL.revokeObjectURL(url);
-        }
     }
 
     return (
@@ -220,6 +229,7 @@ export default function RelatorioBase(){
                                         icon={<DocumentIcon  className="h-5 w-5"/>}
                                         text={'PDF'}
                                         buttonClassName="rounded-2xl p-1.5 bg-green-400"
+                                        onClick={() => exportarRelatorio(resultado, 'pdf')}
                                     />
                                 </div>
                             </div>

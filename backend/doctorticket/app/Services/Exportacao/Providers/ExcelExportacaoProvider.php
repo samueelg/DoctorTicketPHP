@@ -33,12 +33,13 @@ class ExcelExportacaoProvider implements ExportacaoProvider {
                     'Content-Disposition' => 'attachment; filename="' . $filename . '"',
                 ]
             );
-        }catch (Exception $e) {
-        Log::error('Erro ao realizar a extração: ' . $e->getMessage(),
-        ['trace' => $e->getTraceAsString()]
-        );
+        } catch (Exception $e) {
+            Log::error(
+                'Erro ao realizar a extração: ' . $e->getMessage(),
+                ['trace' => $e->getTraceAsString()]
+            );
 
-        throw $e;
+            throw $e;
         }
     }
 
