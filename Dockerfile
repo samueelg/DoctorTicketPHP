@@ -7,15 +7,22 @@ RUN apt-get update && apt-get install -y \
     zip \
     libzip-dev \
     libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev
+
+RUN docker-php-ext-configure gd \
+    --with-freetype \
+    --with-jpeg
 
 # Extensões PHP
 RUN docker-php-ext-install \
     pdo \
     pdo_mysql \
     zip \
-    pcntl
+    pcntl \
+    gd
 
 RUN pecl install redis && docker-php-ext-enable redis
 
