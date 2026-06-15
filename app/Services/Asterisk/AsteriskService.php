@@ -18,17 +18,17 @@ class AsteriskService{
 
     public function processarNewState(Event $event){
         /**
-            * 4 - Tocando
+            * 5 - Tocando
             * 6 - Atendida
         */
         $channelState = $event->getFieldValue('ChannelState');
         $ramal = $event->getFieldValue('CallerIDNum');
 
-        if ($channelState == '4') {
+        if ($channelState == '5') {
             Log::info('1 Evento recebido - Ramal tocando', ['ramal: ' => $ramal]);
             FacadesEvent::dispatch(new LigacaoStatusEvent(
                 ramalEvent: $ramal,
-                statusEvent: 'Tocando'
+                statusEvent: 'ringing'
             ));
         }
 
@@ -36,7 +36,7 @@ class AsteriskService{
             Log::info('2 Evento recebido - Ligação Atendida', ['ramal: ' => $ramal]);
             FacadesEvent::dispatch(new LigacaoStatusEvent(
                 ramalEvent: $ramal,
-                statusEvent: 'Ligação em andamento'
+                statusEvent: 'up'
             ));
         }
     }
@@ -55,7 +55,7 @@ class AsteriskService{
             Log::info('3 Evento recebido - Ligação encerrada', ['ramal: ' => $ramal]);
             FacadesEvent::dispatch(new LigacaoStatusEvent(
                 ramalEvent: $ramal,
-                statusEvent: 'Ligação Encerrada'
+                statusEvent: 'hangup'
             ));
         }
     }
