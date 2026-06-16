@@ -7,6 +7,9 @@ use App\Models\Ticket;
 use App\Services\Notificacao\NotificacaoService;
 use App\Services\Processamento\ProcessamentoService;
 use App\Services\Transcricao\TranscricaoService;
+use App\Services\Movidesk\MovideskService;
+use Illuminate\Support\Facades\Log;
+
 use Exception;
 
 class TicketController extends Controller
@@ -14,12 +17,14 @@ class TicketController extends Controller
     private $oProcessamentoService;
     private $oTranscricaoService;
     private $oNotificacaoService;
+    private $oMovideskService;
 
-    public function __construct(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService, NotificacaoService $notificacaoService)
+    public function __construct(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService, NotificacaoService $notificacaoService, MovideskService $movideskService)
     {
         $this->oTranscricaoService   = $transcricaoService;
         $this->oProcessamentoService = $processamentoService;
         $this->oNotificacaoService   = $notificacaoService;
+        $this->oMovideskService      = $movideskService;
     }
 
     public function finalizaLigacao(){
@@ -47,18 +52,29 @@ class TicketController extends Controller
                 'urgencia' => $request->urgencia,
             ]);
 
-            return response()->json([
-                'message' => 'Ticket criado com sucesso',
-                'data' => [
-                    'id' => $ticket->id,
-                ],
-            ], 201);
+            Log::info('mandando pro movi');
+            $response = $this->oMovideskService->salvaTicketMovidesk($request);
+            
+Log::info('Retorno movidesk:', [
+    'response' => $response->json()
+]);
+                return response()->json([
+                    'message' => 'Ticket criado com sucesso',
+                    'data' => [
+                        'id' => $ticket->id,
+                        'request' => $request,
+                    ],
+                ], 201);
+
+
         }catch(Exception $e){
-            report($e);
-            return response()->json([
-                'message' => 'Erro ao criar ticket',
-            ], 500);
-        }
+    Log::error($e->getMessage());
+    Log::error($e->getTraceAsString());
+
+    return response()->json([
+        'message' => $e->getMessage(),
+    ], 500);
+}
     }
 
     public function criaNotificacao(){

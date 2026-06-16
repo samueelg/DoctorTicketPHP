@@ -30,11 +30,64 @@ class ProcessamentoService{
 
             Retorne APENAS um JSON válido no seguinte formato:
             {
-            "titulo": "Solicitação Telefone - (Tipo da solicitação)",
-            "assunto": "",
-            "solicitante": "",
-            "unidade": "",
+                "titulo": "",
+                "assunto": "",
+                "descricaoAssunto": "",
+                "acao": "",
+                "solicitante": "",
+                "paciente": "",
+                "unidade": "",
+                "urgencia": "",
+                "serviceFirstLevel": "",
+                "serviceSecondLevel": "",
+                "serviceThirdLevel": "",
             }
+
+            Mapeamento obrigatório dos serviços:
+
+Transferência de Paciente
+    serviceFirstLevel = "Transferência de Paciente"
+    serviceSecondLevel = "Paciente"
+
+Alteração de Contrato
+    serviceFirstLevel = "Alteração de Contrato"
+    serviceSecondLevel = "Contrato"
+
+Cancelamento de Contrato
+    serviceFirstLevel = "Cancelamento de Contrato"
+    serviceSecondLevel = "Contrato"
+
+Auditoria Financeira
+    serviceFirstLevel = "Auditoria Financeira"
+    serviceSecondLevel = "Financeiro"
+
+Contas a Pagar
+    serviceFirstLevel = "Contas a Pagar"
+    serviceSecondLevel = "Financeiro"
+
+Contas a Receber
+    serviceFirstLevel = "Contas a Receber"
+    serviceSecondLevel = "Financeiro"
+
+Movimentação Financeira
+    serviceFirstLevel = "Movimentação Financeira"
+    serviceSecondLevel = "Financeiro"
+
+Formalizar Parcelas
+    serviceFirstLevel = "Formalizar Parcelas"
+    serviceSecondLevel = "Orçamento"
+
+Aprovação de Orçamentos
+    serviceFirstLevel = "Aprovação de Orçamentos"
+    serviceSecondLevel = "Orçamento"
+
+Regras:
+- Identifique o assunto principal da ligação.
+- Escolha obrigatoriamente UM dos valores acima para serviceFirstLevel.
+- serviceSecondLevel deve ser preenchido conforme o mapeamento.
+- Nunca invente categorias diferentes das listadas.
+- Se houver dúvida entre duas categorias, escolha a mais específica.
+- Se não houver uma categoria específica, retorne serviceFirstLevel = "Configurações DH", serviceSecondLevel = null, serviceThirdLevel = null
 
             Exemplo com resposta:
             Transcrição:
@@ -46,8 +99,12 @@ class ProcessamentoService{
             "assunto": "Olá! Bom dia...",
             "descricaoAssunto": "Transferência de paciente entre unidades",
             "acao": "Transferencia realizada conforme o solicitado"
+            "urgencia": "Baixa"
             "solicitante": "João",
             "unidade": "Londrina Gleba Palhano",
+            "serviceFirstLevel": "Transferência de Paciente",
+            "serviceSecondLevel": "Paciente",
+            "serviceThirdLevel": null
             }
 
             O campo "assunto" deve seguir EXATAMENTE este template:
@@ -66,6 +123,8 @@ class ProcessamentoService{
                 Unidade: {unidade}\n\n
 
                 A sua avaliação é muito importante, se possível avalie o meu atendimento através da mensagem desse ticket. Obrigado!\n\n"
+
+            A urgencia deverá SEMPRE ser "Baixa"
 
             Variaveis:' . "
             hora = {$horario}
