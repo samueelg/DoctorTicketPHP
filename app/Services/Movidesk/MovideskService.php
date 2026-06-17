@@ -10,11 +10,8 @@ class MovideskService{
     public function salvaTicketMovidesk($payload){
         $token = env('MOVIDESK_API_KEY');
         $data = Carbon::now()->format('Y-m-d\TH:i:s.u');
-        
-        Log::info('Data', ['data' => $data]);
-        Log::info('token', ['token' => $token]);
 
-        Log::info('Dados recebidos: ', ['dados' => $payload]);
+        Log::info('Dados recebidos (MovideskClass): ', ['dados' => $payload]);
 
         //Consulta
         $response = Http::timeout(60)
@@ -30,50 +27,32 @@ class MovideskService{
             'urgency' => $payload->urgencia, //Baixa
             'status' => 'Resolvido', //Resolvido
             'justification' => '',
-            'ownerTeam' => 'SAF',
+            'ownerTeam' => "SAF",
             'origin' => 2,
             'createdDate' => $data,
+            "serviceFirstLevel" => "Paciente",
+            "serviceSecondLevel" => "Transferência de Paciente",
             "serviceThirdLevel" => null,
-            "serviceSecondLevel" => "Paciente",
-            "serviceFirstLevel" =>"Transferência de Paciente",
             "actions" => [
                 [
-                    "id" => 1,
                     "type" => 2,
                     "origin" => 2,
                     "description" => $payload->assunto,
-                    "status" => "Resolvido",
-                    "justification" => null,
-                    "createdDate" => $data,
-                    "isDeleted" => false,
-                    "tags" => []
+                    "createdBy" => [
+                        "id" => "1159788127",
+                    ],
                 ]
             ],
             "clients" => [
                 [
-                "id" => "1159788127",
-                "personType" => 1,
-                "profileType" => 3,
-                "email" => "samuel.goncalves@oralsinfranquias.com.br",
+                    "id" => "1159788127",
                 ]
             ],
             "createdBy" => [
-                [
                 "id" => "1159788127",
-                "personType" => 1,
-                "profileType" => 3,
-                "businessName" => "Samuel Gonçalves",
-                "email" => "samuel.goncalves@oralsinfranquias.com.br",
-                ]
             ],
             "owner" => [
-                [
                 "id" => "1159788127",
-                "personType" => 1,
-                "profileType" => 3,
-                "businessName" => "Samuel Gonçalves",
-                "email" => "samuel.goncalves@oralsinfranquias.com.br",
-                ]
             ]
         ]
     );

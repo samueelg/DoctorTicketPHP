@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->delete('/usuarios/{user}', [UsuarioController
 
 /* Rotas de Ticket */
 Route::middleware('auth:sanctum')->post('/ticket', [TicketController::class, 'salvarTicket'])->name('ticket.create');
+
 /* Rotas de notificação */
 Route::middleware('auth:sanctum')->post('/notificacao', [TicketController::class, 'criaNotificacao'])->name('notificacao.criar');
 Route::middleware('auth:sanctum')->get('/notificacao', [NotificacaoController::class, 'getNotificacoes'])->name('notificacao.get');

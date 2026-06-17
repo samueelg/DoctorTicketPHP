@@ -52,29 +52,32 @@ class TicketController extends Controller
                 'urgencia' => $request->urgencia,
             ]);
 
-            Log::info('mandando pro movi');
             $response = $this->oMovideskService->salvaTicketMovidesk($request);
             
-Log::info('Retorno movidesk:', [
-    'response' => $response->json()
-]);
+            Log::info('Retorno movidesk:', [
+                'response' => $response->json()
+            ]);
+
                 return response()->json([
                     'message' => 'Ticket criado com sucesso',
                     'data' => [
-                        'id' => $ticket->id,
-                        'request' => $request,
+                        'id' => $ticket->id
                     ],
                 ], 201);
 
 
         }catch(Exception $e){
-    Log::error($e->getMessage());
-    Log::error($e->getTraceAsString());
+            try {
+                Log::error($e->getMessage());
+                Log::error($e->getTraceAsString());
+            } catch (\Throwable) {
+                // Evita que uma falha de logging mascare a exceção original e gere um 500 sem corpo
+            }
 
-    return response()->json([
-        'message' => $e->getMessage(),
-    ], 500);
-}
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function criaNotificacao(){
