@@ -16,6 +16,7 @@ class Usuario extends Authenticatable
         'nome',
         'ramal',
         'email',
+        'idMovidesk',
         'senha',
         'tipo',
         'status'

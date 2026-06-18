@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FranqueadoController;
 use App\Http\Controllers\NotificacaoController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\UsuarioController;
@@ -20,9 +21,12 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::middleware('auth:sanctum')->get('/me', [UsuarioController::class, 'getDadosUsuario'])->name('me');
 Route::middleware('auth:sanctum')->get('/usuarios', [UsuarioController::class, 'getUsuarios'])->name('usuarios');
 Route::middleware('auth:sanctum')->get('/usuarios/{user}', [UsuarioController::class, 'getUsuario'])->name('usuarios');
-Route::middleware('auth:sanctum')->post('/usuarios', [UsuarioController::class, 'saveUsuario'])->name('usuarios.create');
-Route::middleware('auth:sanctum')->patch('/usuarios/{user}', [UsuarioController::class, 'editUsuario'])->name('usuarios.edit');
-Route::middleware('auth:sanctum')->delete('/usuarios/{user}', [UsuarioController::class, 'removeUsuario'])->name('usuarios.delete');
+Route::middleware('auth:sanctum')->post('/usuarios', [UsuarioController::class, 'salvarUsuario'])->name('usuarios.create');
+Route::middleware('auth:sanctum')->patch('/usuarios/{user}', [UsuarioController::class, 'editarUsuario'])->name('usuarios.edit');
+Route::middleware('auth:sanctum')->delete('/usuarios/{user}', [UsuarioController::class, 'removerUsuario'])->name('usuarios.delete');
+
+/* Rotas de Configuracao de Usuários */
+Route::middleware('auth:sanctum')->post('/configuracao/{user}', [UsuarioController::class, 'salvarConfiguracao'])->name('usuarios.salvarConfiguracao');
 
 /* Rotas de Ticket */
 Route::middleware('auth:sanctum')->post('/ticket', [TicketController::class, 'salvarTicket'])->name('ticket.create');
@@ -39,3 +43,6 @@ Route::middleware('auth:sanctum')->post('/transcrever', [TicketController::class
 /* Rotas de relatórios */
 Route::middleware('auth:sanctum')->get('/relatorio', [RelatorioController::class, 'getRelatorio'])->name('relatorio.get');
 Route::middleware('auth:sanctum')->get('/relatorios/exportarRelatorio', [RelatorioController::class, 'geraArquivoExportacao'])->name('relatorios.exportar');
+
+/* Rotas de franqueado */
+Route::middleware('auth:sanctum')->get('/franqueado', [FranqueadoController::class, 'getFranqueado'])->name('franqueado.get');
