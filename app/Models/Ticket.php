@@ -17,4 +17,13 @@ class Ticket extends Model
         'solicitante',
         'urgencia',
     ];
+
+    public function usuario(){
+        return $this->belongsTo(Usuario::class, 'idUsuario');
+    }
+
+    public function franqueado(){
+        return $this->belongsTo(Franqueado::class, 'solicitante');
+    }
 }
+

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('status');
             $table->foreignId('idUsuario')->constrained('usuario')->onDelete('cascade');
             $table->string('categoria');
-            $table->string('solicitante');
+            $table->foreignId('solicitante')->constrained('franqueado')->onDelete('cascade');
             $table->string('urgencia');
             $table->timestamps();
         });

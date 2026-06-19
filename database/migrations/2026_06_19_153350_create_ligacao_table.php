@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('usuario', function (Blueprint $table){
-            $table->string('idMovidesk')->nullable();
+        Schema::create('ligacao', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('idUsuario')->constrained('usuario')->onDelete('cascade');
+            $table->foreignId('idFranqueado')->constrained('franqueado')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('usuario', function (Blueprint $table) {
-            $table->dropColumn('idMovidesk');
-        });
+        Schema::dropIfExists('ligacao');
     }
 };

@@ -3,12 +3,34 @@
 namespace App\Services\Relatorio;
 
 use App\Models\Usuario;
+use App\Services\Exportacao\Factories\ExportacaoFactory;
 use DateTime;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class RelatorioService{
-    public function getTicketsChat($filtros){
+
+    public function getRelatorio(array $filtros){
+        $tickets = [];
+        switch($filtros['filtro']){
+            case 1:
+                $tickets = $this->getTicketsChat($filtros);
+                break;
+        }
+        
+        return $tickets;
+    }
+
+    public function geraRelatorioExportacao(array $filtros){
+        $dados = $this->getRelatorio($filtros);
+
+        $provider = ExportacaoFactory::criar($filtros['tipo']);
+
+        return $provider->exportar($dados);
+    }
+
+    /* Relatório responsavel por extrair os ticket abertos por CHAT WhatsApp Business */
+    public function getTicketsChat(array $filtros){
         $token = env('MOVIDESK_API_KEY');
 
         $dataInicio = new DateTime($filtros['data'][0]);
@@ -26,7 +48,7 @@ class RelatorioService{
         $expand = 'owner, createdBy';
         $filter = "createdDate ge $dataInicio and createdDate lt $dataFim and origin eq Movidesk.Core.Data.Enums.TicketOrigin'23'";
 
-        if($filtros['usuario']){
+        if(isset($filtros['usuario'])){
             $idMovideskUsuario = Usuario::select('idMovidesk')->find($filtros['usuario']);
 
             $filter .= " and owner/id eq '{$idMovideskUsuario->idMovidesk}'";

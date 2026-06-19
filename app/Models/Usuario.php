@@ -31,6 +31,14 @@ class Usuario extends Authenticatable
         return $this->hasMany(Notificacao::class, 'idUsuario');
     }
 
+    public function tickets(){
+        return $this->hasMany(Ticket::class, 'idUsuario');
+    }
+
+    public function ligacao(){
+        return $this->hasMany(Ligacao::class, 'idUsuario');
+    }
+
     protected $hidden = [
         'senha',
     ];

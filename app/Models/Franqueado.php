@@ -14,4 +14,12 @@ class Franqueado extends Model
         'idUnidade',
         'idMovidesk',
     ];
+
+    public function tickets(){
+        return $this->hasMany(Ticket::class, 'solicitante');
+    }
+
+    public function ligacao(){
+        return $this->hasMany(Ligacao::class, 'idFranqueado');
+    }
 }

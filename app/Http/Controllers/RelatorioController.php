@@ -2,39 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Exportacao\Factories\ExportacaoFactory;
+use App\Jobs\GerarRelatorioJob;
 use App\Services\Relatorio\RelatorioService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class RelatorioController extends Controller
 {
-    private $oRelatorioService;
+    private RelatorioService $oRelatorioService;
     public function __construct(RelatorioService $relatorioService)
     {
         $this->oRelatorioService = $relatorioService;
     }
 
-    /* Relatório responsavel por extrair os ticket abertos por CHAT WhatsApp Business */
     public function getRelatorio(Request $request){
-        $filtros = $request->all();
-        
-        $tickets = [];
-        switch($filtros['filtro']){
-            case 1:
-                $tickets = $this->oRelatorioService->getTicketsChat($filtros);
-                break;
-        }
-        
-        return $tickets;
+        return $this->oRelatorioService->getRelatorio($request->all());
     }
 
     public function geraArquivoExportacao(Request $request){
-        $dados = $this->getRelatorio($request);
-        $tipo = $request->tipo;
+        GerarRelatorioJob::dispatch(
+            $request->user()->id,
+            $request->all()
+        );
 
-        $provider = ExportacaoFactory::criar($tipo);
-        return $provider->exportar($dados);
-        
+        return response()->json([
+            'success' => true,
+            'message' => 'Relatório em processamento'
+        ]);
     }
 }

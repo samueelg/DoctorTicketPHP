@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveTicketRequest;
+use App\Models\Franqueado;
 use App\Models\Ticket;
+use App\Services\Ligacao\LigacaoService;
 use App\Services\Notificacao\NotificacaoService;
 use App\Services\Processamento\ProcessamentoService;
 use App\Services\Transcricao\TranscricaoService;
@@ -18,13 +20,15 @@ class TicketController extends Controller
     private $oTranscricaoService;
     private $oNotificacaoService;
     private $oMovideskService;
+    private $oLigacaoService;
 
-    public function __construct(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService, NotificacaoService $notificacaoService, MovideskService $movideskService)
+    public function __construct(TranscricaoService $transcricaoService, ProcessamentoService $processamentoService, NotificacaoService $notificacaoService, MovideskService $movideskService, LigacaoService $ligacaoService)
     {
         $this->oTranscricaoService   = $transcricaoService;
         $this->oProcessamentoService = $processamentoService;
         $this->oNotificacaoService   = $notificacaoService;
         $this->oMovideskService      = $movideskService;
+        $this->oLigacaoService       = $ligacaoService;
     }
 
     public function finalizaLigacao(){
@@ -40,6 +44,7 @@ class TicketController extends Controller
     public function salvarTicket(SaveTicketRequest $request){
         try{
             $dataAtual = now()->format('Y-m-d H:i:s');
+            $franqueado = Franqueado::where('idMovidesk', $request->solicitante)->first();
 
             $ticket = Ticket::create([
                 'titulo' => $request->titulo,
@@ -48,20 +53,23 @@ class TicketController extends Controller
                 'status' => $request->status,
                 'idUsuario' => $request->user()->id,
                 'categoria' => $request->categoria,
-                'solicitante' => $request->solicitante,
+                'solicitante' => $franqueado->id,
                 'urgencia' => $request->urgencia,
             ]);
 
-            $response = $this->oMovideskService->salvaTicketMovidesk($request);
-            
-            Log::info('Retorno movidesk:', [
-                'response' => $response->json()
-            ]);
+            $dadosLigacao = [
+                'idUsuario'    => $request->user()->id,
+                'idFranqueado' => $franqueado->id
+            ];
+
+            $ligacao  = $this->oLigacaoService->salvaLigacao($dadosLigacao);
+            $movidesk = $this->oMovideskService->salvaTicketMovidesk($request);
 
                 return response()->json([
                     'message' => 'Ticket criado com sucesso',
                     'data' => [
-                        'id' => $ticket->id
+                        'idTicket' => $ticket->id,
+                        'idLigacao' => $ligacao->id
                     ],
                 ], 201);
 

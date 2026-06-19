@@ -4,7 +4,7 @@ namespace App\Services\Exportacao\Providers;
 
 use App\Services\Exportacao\Providers\ExportacaoProvider;
 use Exception;
-use Laravel\Reverb\Loggers\Log;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Shuchkin\SimpleXLSXGen;
 
@@ -65,14 +65,14 @@ class ExcelExportacaoProvider implements ExportacaoProvider {
         return $rows;
     }
 
-    protected function formataRow($dado){
+    protected function formataRow(array $dado){
         return [
             $dado['id'],
             $dado['subject'],
             $dado['resolvedIn'] ?? 'Não Informado',
             $dado['status'],
-            'Teste',
-            'teste2',
+            $dado['createdBy']['businessName'] ?? 'Não Informado',
+            $dado['owner']['businessName'] ?? 'Não Informado',
         ];
     }
 }

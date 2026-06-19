@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('ramal')->unique();
             $table->string('email')->unique()->nullable();
             $table->string('senha');
+            $table->string('idMovidesk')->nullable();
             $table->enum('status', ['ativo', 'inativo'])->default('ativo');
             $table->enum('tipo', ['analista', 'admin']);
             $table->timestamps();
