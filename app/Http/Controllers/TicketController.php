@@ -65,6 +65,13 @@ class TicketController extends Controller
             $ligacao  = $this->oLigacaoService->salvaLigacao($dadosLigacao);
             $movidesk = $this->oMovideskService->salvaTicketMovidesk($request);
 
+            $this->oNotificacaoService->criarNotificacao(
+                $request->user()->id,
+                'Ticket Criado!',
+                'O ticket #'.$movidesk.' foi criado com sucesso!',
+                'ticket'
+            );
+
                 return response()->json([
                     'message' => 'Ticket criado com sucesso',
                     'data' => [
@@ -87,11 +94,4 @@ class TicketController extends Controller
             ], 500);
         }
     }
-
-    public function criaNotificacao(){
-        $this->oNotificacaoService->criarNotificacao();
-
-        return response()->json(['message' => 'Sucesso!']);
-    }
-
 }

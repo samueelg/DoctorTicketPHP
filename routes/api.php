@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->post('/transcrever', [TicketController::class
 /* Rotas de relatórios */
 Route::middleware('auth:sanctum')->get('/relatorio', [RelatorioController::class, 'getRelatorio'])->name('relatorio.get');
 Route::middleware('auth:sanctum')->get('/relatorios/exportarRelatorio', [RelatorioController::class, 'geraArquivoExportacao'])->name('relatorios.exportar');
+Route::middleware('auth:sanctum')->get('/relatorios/download/{arquivo}', [RelatorioController::class, 'download'])->name('relatorios.download');
 
 /* Rotas de franqueado */
 Route::middleware('auth:sanctum')->get('/franqueado', [FranqueadoController::class, 'getFranqueado'])->name('franqueado.get');

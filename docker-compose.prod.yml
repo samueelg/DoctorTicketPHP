@@ -5,12 +5,22 @@ services:
 
   app:
     restart: unless-stopped
+    volumes:
+      - storage_data:/var/www/storage/app
 
   reverb:
     restart: unless-stopped
-      
+
+  queue:
+    restart: unless-stopped
+    volumes:
+      - storage_data:/var/www/storage/app
+
   mariadb:
     restart: unless-stopped
 
   redis:
     restart: unless-stopped
+
+volumes:
+  storage_data:

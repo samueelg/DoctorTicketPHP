@@ -7,6 +7,8 @@ use App\Services\Exportacao\Factories\ExportacaoFactory;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class RelatorioService{
 
@@ -21,12 +23,22 @@ class RelatorioService{
         return $tickets;
     }
 
-    public function geraRelatorioExportacao(array $filtros){
+    public function geraRelatorioExportacao(array $filtros): array{
         $dados = $this->getRelatorio($filtros);
 
         $provider = ExportacaoFactory::criar($filtros['tipo']);
+        $arquivo  = $provider->gerar($dados);
 
-        return $provider->exportar($dados);
+        $nome    = 'relatorio_' . Str::uuid() . '.' . $arquivo['extensao'];
+        $caminho = 'relatorios/' . $nome;
+
+        Storage::disk('local')->put($caminho, $arquivo['conteudo']);
+
+        return [
+            'nome'    => $nome,
+            'caminho' => $caminho,
+            'mime'    => $arquivo['mime'],
+        ];
     }
 
     /* Relatório responsavel por extrair os ticket abertos por CHAT WhatsApp Business */

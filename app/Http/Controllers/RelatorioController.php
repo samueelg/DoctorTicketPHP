@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\GerarRelatorioJob;
 use App\Services\Relatorio\RelatorioService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RelatorioController extends Controller
 {
@@ -28,5 +29,17 @@ class RelatorioController extends Controller
             'success' => true,
             'message' => 'Relatório em processamento'
         ]);
+    }
+
+    public function download(string $arquivo){
+        $caminho = 'relatorios/' . basename($arquivo);
+
+        abort_unless(
+            Storage::disk('local')->exists($caminho),
+            404,
+            'Arquivo não encontrado'
+        );
+
+        return Storage::disk('local')->download($caminho);
     }
 }

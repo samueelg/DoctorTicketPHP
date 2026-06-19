@@ -10,15 +10,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class NotificacaoService{
-    public function criarNotificacao(){
+    public function criarNotificacao(
+        int $idUsuario,
+        string $titulo,
+        string $mensagem,
+        ?string $tipo = null
+    ): Notificacao {
+        $notificacao = Notificacao::create([
+            'idUsuario' => $idUsuario,
+            'titulo'    => $titulo,
+            'mensagem'  => $mensagem,
+            'tipo'      => $tipo,
+        ]);
 
-    $notificacao = Notificacao::create([
-        'idUsuario' => 1,
-        'titulo' => 'Teste',
-        'mensagem' => 'Websocket funcionando'
-    ]);
-    
-    Event::dispatch(new NotificacaoCriada($notificacao));
+        Event::dispatch(new NotificacaoCriada($notificacao));
+
+        return $notificacao;
     }
 
     public function getNotificacoes(Request $request){

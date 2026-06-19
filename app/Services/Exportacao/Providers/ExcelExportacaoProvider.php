@@ -5,34 +5,25 @@ namespace App\Services\Exportacao\Providers;
 use App\Services\Exportacao\Providers\ExportacaoProvider;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Shuchkin\SimpleXLSXGen;
 
 class ExcelExportacaoProvider implements ExportacaoProvider {
-    public function exportar($dados): StreamedResponse
+    public function gerar(array $dados): array
     {
         try {
             $xlsx = new SimpleXLSXGen();
 
             $rows = $this->carregaDadosTabela($dados);
             $xlsx->addSheet($rows, 'Relatório');
-            $xlsx->setAuthor(session('nome'));
-            $xlsx->setLastModifiedBy(session('nomeo'));
             $xlsx->setCompany('Oral Sin Franquias<contato@oralsin.com.br>');
             $xlsx->setTitle('Chats WhatsApp');
             $xlsx->setLanguage('pt-BR');
 
-            $filename = "Manutencao_Midias_" . date("d-m-Y_H-i-s") . ".xlsx";
-            return response()->streamDownload(
-                function () use ($xlsx) {
-                    echo $xlsx->__toString();
-                },
-                $filename,
-                [
-                    'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-                ]
-            );
+            return [
+                'conteudo' => $xlsx->__toString(),
+                'extensao' => 'xlsx',
+                'mime'     => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ];
         } catch (Exception $e) {
             Log::error(
                 'Erro ao realizar a extração: ' . $e->getMessage(),
@@ -43,7 +34,7 @@ class ExcelExportacaoProvider implements ExportacaoProvider {
         }
     }
 
-    protected function carregaDadosTabela($dados){
+    protected function carregaDadosTabela(array $dados): array{
         $rows = [];
 
         //Cabeçalhos
@@ -65,7 +56,7 @@ class ExcelExportacaoProvider implements ExportacaoProvider {
         return $rows;
     }
 
-    protected function formataRow(array $dado){
+    protected function formataRow(array $dado): array{
         return [
             $dado['id'],
             $dado['subject'],

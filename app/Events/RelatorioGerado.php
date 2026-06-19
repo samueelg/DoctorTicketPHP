@@ -2,37 +2,44 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RelatorioGerado
+class RelatorioGerado implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
     public int $idUsuario;
-    public $arquivo;
+    public array $arquivo;
 
-    public function __construct(int $idUsuario, $arquivo)
+    public function __construct(int $idUsuario, array $arquivo)
     {
         $this->idUsuario = $idUsuario;
-        $this->arquivo = $arquivo;
+        $this->arquivo   = $arquivo;
     }
 
     /**
      * Get the channels the event should broadcast on.
-     *
-     * @return array<int, Channel>
      */
-    public function broadcastOn()
+    public function broadcastOn(): PrivateChannel
     {
-        return new Channel('usuario.' . $this->idUsuario);
+        return new PrivateChannel('relatorios.usuario.' . $this->idUsuario);
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'relatorio.gerado';
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'nome' => $this->arquivo['nome'] ?? null,
+            'mime' => $this->arquivo['mime'] ?? null,
+            'erro' => $this->arquivo['erro'] ?? null,
+        ];
     }
 }
