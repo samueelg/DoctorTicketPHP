@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Unidade;
+use App\Services\Unidade\UnidadeService;
 use Illuminate\Http\Request;
 
-class UnidadeController extends Controller
-{
-    public function getUnidades(){
-        $unidades = Unidade::all();
+class UnidadeController extends Controller{
+    private UnidadeService $oUnidadeService;
 
-        return response()->json([
-            'data' => $unidades,
-        ], 200);
+    public function __construct(UnidadeService $unidadeService)
+    {
+        $this->oUnidadeService = $unidadeService;
+    }
+
+    public function getUnidades(){
+        return $this->oUnidadeService->getUnidades();
     }
 }

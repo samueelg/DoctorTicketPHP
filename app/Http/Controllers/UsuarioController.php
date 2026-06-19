@@ -16,9 +16,10 @@ class UsuarioController extends Controller
         $usuario = $request->user();
 
         return response()->json([
-            'id' => $usuario->id,
-            'nome' => $usuario->nome,
-            'ramal' => $usuario->ramal,
+            'id'         => $usuario->id,
+            'nome'       => $usuario->nome,
+            'ramal'      => $usuario->ramal,
+            'tipo'       => $usuario->tipo,
             'idMovidesk' => $usuario->idMovidesk,
         ]);
     }

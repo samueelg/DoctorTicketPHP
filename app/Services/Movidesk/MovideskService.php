@@ -10,15 +10,12 @@ class MovideskService{
     public function salvaTicketMovidesk($payload){
         $token = env('MOVIDESK_API_KEY');
         $data = Carbon::now()->format('Y-m-d\TH:i:s.u');
-
-        Log::info('Dados recebidos (MovideskClass): ', ['dados' => $payload]);
+        $idMovideskUsuario = $payload->user()->idMovidesk;
 
         //Consulta
         $response = Http::timeout(60)
-    ->withHeaders([
-        'Content-Type' => 'application/json',
-    ])
-    ->post(
+            ->withHeaders(['Content-Type' => 'application/json',])
+            ->post(
         'https://api.movidesk.com/public/v1/tickets?token=' . $token,
         [
             'type' => 2,
@@ -27,32 +24,32 @@ class MovideskService{
             'urgency' => $payload->urgencia, //Baixa
             'status' => 'Resolvido', //Resolvido
             'justification' => '',
-            'ownerTeam' => "SAF",
+            'ownerTeam' => "Desenvolvimento", //Trocar pra SAF depois
             'origin' => 2,
             'createdDate' => $data,
-            "serviceFirstLevel" => "Paciente",
-            "serviceSecondLevel" => "Transferência de Paciente",
+            "serviceFirstLevel" => $payload->serviceFirstLevel,
+            "serviceSecondLevel" => $payload->serviceSecondLevel,
             "serviceThirdLevel" => null,
             "actions" => [
                 [
                     "type" => 2,
                     "origin" => 2,
-                    "description" => $payload->assunto,
+                    "description" => nl2br(e($payload->assunto)),
                     "createdBy" => [
-                        "id" => "1159788127",
+                        "id" => (string) trim("$idMovideskUsuario"),
                     ],
                 ]
             ],
             "clients" => [
                 [
-                    "id" => "1159788127",
+                    "id" => (string) trim($payload->solicitante),
                 ]
             ],
             "createdBy" => [
-                "id" => "1159788127",
+                "id" => (string) trim($payload->solicitante),
             ],
             "owner" => [
-                "id" => "1159788127",
+                "id" => (string) trim($idMovideskUsuario),
             ]
         ]
     );

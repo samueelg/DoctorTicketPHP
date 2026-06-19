@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('ticket', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->string('assunto');
+            $table->text('assunto');
             $table->date('data_conclusao')->nullable(true);
             $table->string('status');
             $table->foreignId('idUsuario')->constrained('usuario')->onDelete('cascade');

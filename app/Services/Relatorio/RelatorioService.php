@@ -2,8 +2,10 @@
 
 namespace App\Services\Relatorio;
 
+use App\Models\Usuario;
 use DateTime;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class RelatorioService{
     public function getTicketsChat($filtros){
@@ -11,6 +13,7 @@ class RelatorioService{
 
         $dataInicio = new DateTime($filtros['data'][0]);
         $dataFim = new DateTime($filtros['data'][1]);
+        $idMovideskUsuario = '';
 
         // incluir o último dia inteiro
         $dataFim->modify('+1 day');
@@ -22,6 +25,12 @@ class RelatorioService{
         $selectQuery = 'id,createdDate,subject,resolvedIn, owner, createdBy, status';
         $expand = 'owner, createdBy';
         $filter = "createdDate ge $dataInicio and createdDate lt $dataFim and origin eq Movidesk.Core.Data.Enums.TicketOrigin'23'";
+
+        if($filtros['usuario']){
+            $idMovideskUsuario = Usuario::select('idMovidesk')->find($filtros['usuario']);
+
+            $filter .= " and owner/id eq '{$idMovideskUsuario->idMovidesk}'";
+        }
 
         //Consulta
         $response = Http::timeout(60)

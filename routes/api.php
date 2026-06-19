@@ -6,6 +6,7 @@ use App\Http\Controllers\NotificacaoController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\UnidadeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,3 +47,6 @@ Route::middleware('auth:sanctum')->get('/relatorios/exportarRelatorio', [Relator
 
 /* Rotas de franqueado */
 Route::middleware('auth:sanctum')->get('/franqueado', [FranqueadoController::class, 'getFranqueado'])->name('franqueado.get');
+
+/* Rotas de Unidade */
+Route::middleware('auth:sanctum')->get('/unidade', [UnidadeController::class, 'getUnidades'])->name('unidades.get');
