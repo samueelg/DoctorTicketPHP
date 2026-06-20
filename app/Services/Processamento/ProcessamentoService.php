@@ -72,8 +72,8 @@ Transferência de Paciente
     serviceSecondLevel = "Paciente"
 
 Alteração de Contrato
-    serviceFirstLevel = "Contrato"
-    serviceSecondLevel = "Alteração de Contrato"
+    serviceFirstLevel = "Alteração de Contrato"
+    serviceSecondLevel = "Contrato"
 
 Cancelamento de Contrato
     serviceFirstLevel = "Cancelamento de Contrato"

@@ -68,7 +68,7 @@ class TicketController extends Controller
             $this->oNotificacaoService->criarNotificacao(
                 $request->user()->id,
                 'Ticket Criado!',
-                'O ticket #'.$movidesk.' foi criado com sucesso!',
+                'O ticket #'.$movidesk['id'].' foi criado com sucesso!',
                 'ticket'
             );
 

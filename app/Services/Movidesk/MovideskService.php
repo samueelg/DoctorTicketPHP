@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 
 class MovideskService{
     public function salvaTicketMovidesk($payload){
+        Log::info('debug payload salva: ', ['dados ' => $payload]);
+        
         $token = env('MOVIDESK_API_KEY');
         $data = Carbon::now()->format('Y-m-d\TH:i:s.u');
         $idMovideskUsuario = $payload->user()->idMovidesk;
