@@ -16,9 +16,11 @@ class UsuarioController extends Controller
         $usuario = $request->user();
 
         return response()->json([
-            'id' => $usuario->id,
-            'nome' => $usuario->nome,
-            'ramal' => $usuario->ramal,
+            'id'         => $usuario->id,
+            'nome'       => $usuario->nome,
+            'ramal'      => $usuario->ramal,
+            'tipo'       => $usuario->tipo,
+            'idMovidesk' => $usuario->idMovidesk,
         ]);
     }
 
@@ -43,7 +45,7 @@ class UsuarioController extends Controller
     }
 
     /* Salva o usuário no banco de dados */
-    public function saveUsuario(SaveUsuarioRequest $request)
+    public function salvarUsuario(SaveUsuarioRequest $request)
     {
         try {
             $usuario = Usuario::create([
@@ -74,7 +76,7 @@ class UsuarioController extends Controller
     }
 
     /* Guarda os dados de edição do usuário no banco*/
-    public function editUsuario(UpdateUsuarioRequest $request, Usuario $user)
+    public function editarUsuario(UpdateUsuarioRequest $request, Usuario $user)
     {
         if (!$user) {
             return response()->json([
@@ -111,7 +113,7 @@ class UsuarioController extends Controller
     }
 
     /* Remoção do usuário  */
-    public function removeUsuario(Usuario $user)
+    public function removerUsuario(Usuario $user)
     {
         if (!$user) {
             return response()->json([
@@ -131,5 +133,32 @@ class UsuarioController extends Controller
                 'message' => 'Erro ao deletar usuário',
             ], 500);
         }
+    }
+
+    public function salvarConfiguracao(Request $request, Usuario $user){
+        if (!$user) {
+            return response()->json([
+                'message' => 'Usuário não encontrado',
+            ], 404);
+        }
+
+        $idMovidesk       = $request->idMovidesk;
+        $exibeNotificacao = $request->exibeNotificacoes;
+
+        try{
+            $user->update([
+                    'idMovidesk'       => $idMovidesk,
+                    'exibeNotificacoes' => $exibeNotificacao,
+            ]);
+        }catch (Exception $e) {
+            report($e);
+            return response()->json([
+                'message' => 'Erro ao salvar configurações',
+            ], 500);
+        }
+
+        return response()->json([
+            'message' => 'idMovidesk adicionado com sucesso!',
+        ], 200);
     }
 }

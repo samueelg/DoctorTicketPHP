@@ -37,8 +37,15 @@ COPY . .
 # Instala dependências Laravel
 RUN composer install
 
-# Permissões
-RUN chmod -R 775 storage bootstrap/cache
+# Permissões (vale para o caso de produção, onde os arquivos vêm da imagem)
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# Entrypoint: ajusta a posse de storage/cache em runtime (cobre dev com bind mount)
+COPY docker/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Script de inicialização
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]

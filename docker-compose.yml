@@ -32,6 +32,17 @@ services:
     depends_on:
       - app
 
+  queue:
+    build: .
+
+    container_name: queue
+
+    command: php artisan queue:work redis --tries=3 --timeout=180
+
+    depends_on:
+      - app
+      - redis
+
   mariadb:
     image: mariadb:11
 

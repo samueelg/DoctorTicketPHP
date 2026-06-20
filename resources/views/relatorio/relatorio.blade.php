@@ -118,8 +118,8 @@
                     <td>{{ $item['subject'] }}</td>
                     <td>{{ $item['resolvedIn'] }}</td>
                     <td>{{ $item['status'] }}</td>
-                    <td>teste</td>
-                    <td>teste</td>
+                    <td>{{ $item['createdBy']['businessName'] ?? 'Não Informado'}} </td>
+                    <td>{{ $item['owner']['businessName'] ?? 'Não Informado'}}</td>
                 </tr>
             @endforeach
         </tbody>

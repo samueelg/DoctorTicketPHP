@@ -12,3 +12,7 @@ services:
   reverb:
     volumes:
       - ./:/var/www
+
+  queue:
+    volumes:
+      - ./:/var/www

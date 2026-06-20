@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Usuario;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ticket', function (Blueprint $table) {
+        Schema::create('ligacao', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo');
-            $table->string('assunto');
-            $table->date('data_conclusao')->nullable(true);
-            $table->string('status');
             $table->foreignId('idUsuario')->constrained('usuario')->onDelete('cascade');
-            $table->string('categoria');
-            $table->string('solicitante');
-            $table->string('urgencia');
+            $table->foreignId('idFranqueado')->constrained('franqueado')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ticket');
+        Schema::dropIfExists('ligacao');
     }
 };

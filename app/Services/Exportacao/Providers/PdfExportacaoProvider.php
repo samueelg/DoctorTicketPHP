@@ -4,13 +4,12 @@ namespace App\Services\Exportacao\Providers;
 
 use App\Services\Exportacao\Providers\ExportacaoProvider;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PdfExportacaoProvider implements ExportacaoProvider {
-    public function exportar(array $dados): StreamedResponse {
+    public function gerar(array $dados): array {
         try {
-        $pdf = Pdf::loadView(
+            $pdf = Pdf::loadView(
                 'relatorio.relatorio',
                 ['dados' => $dados]
             );
@@ -19,15 +18,12 @@ class PdfExportacaoProvider implements ExportacaoProvider {
             $pdf->setOption('footer-right', '[page] / [toPage]');
             $pdf->setOption('footer-font-size', 10);
             $pdf->setOption('disable-smart-shrinking', true);
-    
-            $filename = "Contas_Receber_" . date("d-m-Y_H-i-s") . ".pdf";
-            return response()->streamDownload(function () use ($pdf) {
-                echo $pdf->output();
-            }, $filename,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            ]);
+
+            return [
+                'conteudo' => $pdf->output(),
+                'extensao' => 'pdf',
+                'mime'     => 'application/pdf',
+            ];
         } catch (\Exception $e) {
             Log::error(
                 'Erro ao realizar a extração: ' . $e->getMessage(),

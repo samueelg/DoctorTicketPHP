@@ -10,15 +10,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class NotificacaoService{
-    public function criarNotificacao(){
+    public function criarNotificacao(
+        int $idUsuario,
+        string $titulo,
+        string $mensagem,
+        ?string $tipo = null
+    ): Notificacao {
+        $notificacao = Notificacao::create([
+            'idUsuario' => $idUsuario,
+            'titulo'    => $titulo,
+            'mensagem'  => $mensagem,
+            'tipo'      => $tipo,
+        ]);
 
-    $notificacao = Notificacao::create([
-        'idUsuario' => 1,
-        'titulo' => 'Teste',
-        'mensagem' => 'Websocket funcionando'
-    ]);
-    
-    Event::dispatch(new NotificacaoCriada($notificacao));
+        Event::dispatch(new NotificacaoCriada($notificacao));
+
+        return $notificacao;
     }
 
     public function getNotificacoes(Request $request){
@@ -85,4 +92,21 @@ class NotificacaoService{
             ]);
         }
     }
+
+    public function lerTodasNotificacoesUsuario(int $idUsuario){
+        try{
+            Notificacao::where('idUsuario', $idUsuario)
+                ->whereNull('lida_em')
+                ->update(['lida_em' => now()]);
+
+            return response()->json([
+                'message' => 'Notificações marcadas como lidas',
+                'success' => true,
+            ]);
+        }catch(Exception $e){
+            Log::info(['Erro ao ler todas as notificações!' => $e]);
+            return response()->json(['message' => $e, 'success' => false]);
+        }
+    }
+
 }

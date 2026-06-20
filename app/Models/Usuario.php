@@ -16,6 +16,8 @@ class Usuario extends Authenticatable
         'nome',
         'ramal',
         'email',
+        'idMovidesk',
+        'exibeNotificacoes',
         'senha',
         'tipo',
         'status'
@@ -28,6 +30,14 @@ class Usuario extends Authenticatable
 
     public function notificacoes(){
         return $this->hasMany(Notificacao::class, 'idUsuario');
+    }
+
+    public function tickets(){
+        return $this->hasMany(Ticket::class, 'idUsuario');
+    }
+
+    public function ligacao(){
+        return $this->hasMany(Ligacao::class, 'idUsuario');
     }
 
     protected $hidden = [
