@@ -28,8 +28,7 @@ class NotificacaoCriada implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        //Ajustar depois pra private
-        return new Channel(
+        return new PrivateChannel(
             'usuario.' . $this->notificacao->idUsuario
         );
     }

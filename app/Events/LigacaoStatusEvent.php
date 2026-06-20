@@ -6,6 +6,7 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Queue\SerializesModels;
 
 class LigacaoStatusEvent implements ShouldBroadcastNow
@@ -28,8 +29,7 @@ class LigacaoStatusEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        //Ajustar depois pra private
-        return new Channel(
+        return new PrivateChannel(
             'usuario.ramal.' . $this->ramal
         );
     }
