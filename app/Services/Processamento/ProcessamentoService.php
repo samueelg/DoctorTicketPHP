@@ -49,9 +49,7 @@ class ProcessamentoService{
                 "paciente": "",
                 "unidade": "",
                 "urgencia": "",
-                "serviceFirstLevel": "",
-                "serviceSecondLevel": "",
-                "serviceThirdLevel": "",
+                "serviceFirstLevelId": "",
             }
 
             Você nunca deve:
@@ -68,40 +66,31 @@ class ProcessamentoService{
             Mapeamento obrigatório dos serviços:
 
 Transferência de Paciente
-    serviceFirstLevel = "Transferência de Paciente"
-    serviceSecondLevel = "Paciente"
+    serviceFirstLevelId = "73538"
 
 Alteração de Contrato
-    serviceFirstLevel = "Alteração de Contrato"
-    serviceSecondLevel = "Contrato"
+    serviceFirstLevelId = "73505"
 
 Cancelamento de Contrato
-    serviceFirstLevel = "Cancelamento de Contrato"
-    serviceSecondLevel = "Contrato"
+    serviceFirstLevelId = "73511"
 
 Auditoria Financeira
-    serviceFirstLevel = "Auditoria Financeira"
-    serviceSecondLevel = "Financeiro"
+    serviceFirstLevelId = "73513"
 
 Contas a Pagar
-    serviceFirstLevel = "Contas a Pagar"
-    serviceSecondLevel = "Financeiro"
+    serviceFirstLevelId = "73517"
 
 Contas a Receber
-    serviceFirstLevel = "Contas a Receber"
-    serviceSecondLevel = "Financeiro"
+    serviceFirstLevelId = "73518"
 
 Movimentação Financeira
-    serviceFirstLevel = "Movimentação Financeira"
-    serviceSecondLevel = "Financeiro"
+    serviceFirstLevelId = "73522"
 
 Formalizar Parcelas
-    serviceFirstLevel = "Formalizar Parcelas"
-    serviceSecondLevel = "Orçamento"
+    serviceFirstLevelId = "73528"
 
 Aprovação de Orçamentos
-    serviceFirstLevel = "Aprovação de Orçamentos"
-    serviceSecondLevel = "Orçamento"
+    serviceFirstLevelId = "73527"
 
 Regras:
 - Identifique o assunto principal da ligação.
@@ -124,9 +113,7 @@ Regras:
             "urgencia": "Baixa"
             "solicitante": "João",
             "unidade": "Londrina Gleba Palhano",
-            "serviceFirstLevel": "Transferência de Paciente",
-            "serviceSecondLevel": "Paciente",
-            "serviceThirdLevel": null
+            "serviceFirstLevelId": "73538"
             }
 
             O campo "assunto" deve seguir EXATAMENTE este template:

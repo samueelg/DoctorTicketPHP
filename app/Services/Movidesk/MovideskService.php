@@ -7,9 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class MovideskService{
-    public function salvaTicketMovidesk($payload){
-        Log::info('debug payload salva: ', ['dados ' => $payload]);
-        
+    public function salvaTicketMovidesk($payload){        
         $token = env('MOVIDESK_API_KEY');
         $data = Carbon::now()->format('Y-m-d\TH:i:s.u');
         $idMovideskUsuario = $payload->user()->idMovidesk;
@@ -29,9 +27,7 @@ class MovideskService{
             'ownerTeam' => "Desenvolvimento", //Trocar pra SAF depois
             'origin' => 2,
             'createdDate' => $data,
-            "serviceFirstLevel" => $payload->serviceFirstLevel,
-            "serviceSecondLevel" => $payload->serviceSecondLevel,
-            "serviceThirdLevel" => null,
+            'serviceFirstLevelId' => $payload->serviceFirstLevelId,
             "actions" => [
                 [
                     "type" => 2,
