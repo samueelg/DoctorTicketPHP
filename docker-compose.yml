@@ -43,6 +43,16 @@ services:
       - app
       - redis
 
+  asterisk:
+    build: .
+
+    container_name: asterisk
+
+    command: php artisan asterisk:listen
+
+    depends_on:
+      - app
+
   mariadb:
     image: mariadb:11
 

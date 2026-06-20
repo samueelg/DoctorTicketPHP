@@ -16,6 +16,9 @@ services:
     volumes:
       - storage_data:/var/www/storage/app
 
+  asterisk:
+    restart: unless-stopped
+
   mariadb:
     restart: unless-stopped
 

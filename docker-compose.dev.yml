@@ -16,3 +16,7 @@ services:
   queue:
     volumes:
       - ./:/var/www
+
+  asterisk:
+    volumes:
+      - ./:/var/www
