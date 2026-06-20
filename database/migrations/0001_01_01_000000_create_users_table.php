@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('idMovidesk')->nullable();
             $table->enum('status', ['ativo', 'inativo'])->default('ativo');
             $table->enum('tipo', ['analista', 'admin']);
+            $table->boolean('exibeNotificacoes')->default(true);
             $table->timestamps();
         });
     }

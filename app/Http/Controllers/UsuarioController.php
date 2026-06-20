@@ -142,17 +142,13 @@ class UsuarioController extends Controller
             ], 404);
         }
 
-        $idMovidesk = $request->idMovidesk;
-
-        if(!$idMovidesk){
-            return response()->json([
-                'message' => 'idMovidesk vazio!',
-            ], 404);
-        }
+        $idMovidesk       = $request->idMovidesk;
+        $exibeNotificacao = $request->exibeNotificacoes;
 
         try{
             $user->update([
-                    'idMovidesk'  => $idMovidesk,
+                    'idMovidesk'       => $idMovidesk,
+                    'exibeNotificacoes' => $exibeNotificacao,
             ]);
         }catch (Exception $e) {
             report($e);

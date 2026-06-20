@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->post('/ticket', [TicketController::class, 'sa
 /* Rotas de notificação */
 Route::middleware('auth:sanctum')->post('/notificacao', [TicketController::class, 'criaNotificacao'])->name('notificacao.criar');
 Route::middleware('auth:sanctum')->get('/notificacao', [NotificacaoController::class, 'getNotificacoes'])->name('notificacao.get');
+Route::middleware('auth:sanctum')->patch('/notificacao/ler-todas', [NotificacaoController::class, 'lerTodasNotificacoes'])->name('notificacao.ler-todas');
 Route::middleware('auth:sanctum')->patch('/notificacao/{notificacao}', [NotificacaoController::class, 'lerNotificacao'])->name('notificacao.patch');
 Route::middleware('auth:sanctum')->delete('/notificacao/{notificacao}', [NotificacaoController::class, 'removerNotificacao'])->name('notificacao.delete');
 

@@ -92,4 +92,21 @@ class NotificacaoService{
             ]);
         }
     }
+
+    public function lerTodasNotificacoesUsuario(int $idUsuario){
+        try{
+            Notificacao::where('idUsuario', $idUsuario)
+                ->whereNull('lida_em')
+                ->update(['lida_em' => now()]);
+
+            return response()->json([
+                'message' => 'Notificações marcadas como lidas',
+                'success' => true,
+            ]);
+        }catch(Exception $e){
+            Log::info(['Erro ao ler todas as notificações!' => $e]);
+            return response()->json(['message' => $e, 'success' => false]);
+        }
+    }
+
 }
