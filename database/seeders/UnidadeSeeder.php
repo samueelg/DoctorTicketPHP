@@ -9,7 +9,7 @@ class UnidadeSeeder extends Seeder
 {
     public function run(): void
     {
-        $arquivo = storage_path('app/imports/ClinicasImport.csv');
+        $arquivo = storage_path('app/imports/ClinicasImport.CSV');
 
         $handle = fopen($arquivo, 'r');
 

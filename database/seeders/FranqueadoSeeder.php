@@ -13,7 +13,7 @@ class FranqueadoSeeder extends Seeder
      */
     public function run(): void
     {
-        $arquivo = storage_path('app/imports/FranqueadosImport.csv');
+        $arquivo = storage_path('app/imports/FranqueadosImport.CSV');
 
         $handle = fopen($arquivo, 'r');
 
