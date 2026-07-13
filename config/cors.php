@@ -19,7 +19,12 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:1420'), 'http://127.0.0.1:1420'],
+    'allowed_origins' => [
+        env('FRONTEND_URL', 'http://localhost:1420'),
+        'http://127.0.0.1:1420',
+        'http://tauri.localhost',
+        'tauri://localhost',
+    ],
 
     'allowed_origins_patterns' => [],
 
