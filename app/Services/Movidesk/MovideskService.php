@@ -24,7 +24,7 @@ class MovideskService{
             'urgency' => $payload->urgencia, //Baixa
             'status' => 'Resolvido', //Resolvido
             'justification' => '',
-            'ownerTeam' => "Desenvolvimento", //Trocar pra SAF depois
+            'ownerTeam' => "SAF", //Trocar pra SAF depois
             'origin' => 2,
             'createdDate' => $data,
             'serviceFirstLevelId' => $payload->serviceFirstLevelId,
