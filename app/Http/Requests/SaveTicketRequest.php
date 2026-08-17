@@ -28,7 +28,8 @@ class SaveTicketRequest extends FormRequest
             'categoria'=>['required', 'string','max:128'],
             'urgencia'=>['required', 'string', 'max:128'],
             'status' => ['required', 'string','max:128'],
-            'unidade' => ['required', 'integer',]
+            'unidade' => ['required', 'integer',],
+            'setor' => ['nullable', 'string', 'max:128']
         ];
     }
 

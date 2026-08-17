@@ -12,12 +12,7 @@ class MovideskService{
         $data = Carbon::now()->format('Y-m-d\TH:i:s.u');
         $idMovideskUsuario = $payload->user()->idMovidesk;
 
-        //Consulta
-        $response = Http::timeout(60)
-            ->withHeaders(['Content-Type' => 'application/json',])
-            ->post(
-        'https://api.movidesk.com/public/v1/tickets?token=' . $token,
-        [
+        $ticket = [
             'type' => 2,
             'subject' => $payload->titulo,
             'category' => 'Solicitação de Serviço', //Solicitação de serviço
@@ -49,8 +44,22 @@ class MovideskService{
             "owner" => [
                 "id" => (string) trim($idMovideskUsuario),
             ]
-        ]
-    );
+        ];
+
+        $setor = $this->montaCampoSetor($payload->setor);
+
+        if ($setor) {
+            $ticket['customFieldValues'] = [$setor];
+        }
+
+        //Consulta
+        $response = Http::timeout(60)
+            ->withHeaders(['Content-Type' => 'application/json',])
+            ->post(
+                'https://api.movidesk.com/public/v1/tickets?token=' . $token,
+                $ticket
+            );
+
         if (!$response->successful()) {
             throw new \Exception(
                 'Erro ao criar ticket no Movidesk: '
@@ -59,5 +68,32 @@ class MovideskService{
         }
 
         return $response;
+    }
+
+    /**
+     * Monta o campo adicional "Setor". Como é um campo do tipo lista, o valor vai
+     * em items[].customFieldItem (e não em "value") e precisa ser idêntico ao item
+     * cadastrado no Movidesk. Setor ausente ou fora do mapeamento não é enviado.
+     */
+    private function montaCampoSetor($setor): ?array
+    {
+        if (!in_array($setor, array_keys(config('movidesk.setores', [])), true)) {
+            if (!empty($setor)) {
+                Log::warning('Setor não enviado ao Movidesk por estar fora do mapeamento: ' . $setor);
+            }
+
+            return null;
+        }
+
+        $config = config('movidesk.setor');
+
+        return [
+            'customFieldId'     => $config['customFieldId'],
+            'customFieldRuleId' => $config['customFieldRuleId'],
+            'line'              => $config['line'] ?? 1,
+            'items'             => [
+                ['customFieldItem' => $setor],
+            ],
+        ];
     }
 }

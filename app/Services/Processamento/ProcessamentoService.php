@@ -20,6 +20,7 @@ class ProcessamentoService{
     public function processarDados($transcricao){
         $apiKey = env('GROQ_API_KEY');
         $horario = date('H');
+        $listaSetores = $this->montaListaSetores();
 
         $prompt = '
             Você é um assistente especializado em atendimento de suporte de clínicas odontológicas da Oral Sin.
@@ -49,6 +50,7 @@ class ProcessamentoService{
                 "paciente": "",
                 "unidade": "",
                 "urgencia": "",
+                "setor": "",
                 "serviceFirstLevelId": "",
             }
 
@@ -100,6 +102,18 @@ Regras:
 - Se houver dúvida entre duas categorias, escolha a mais específica.
 - Se não houver uma categoria específica, retorne serviceFirstLevel = "Configurações DH", serviceSecondLevel = null, serviceThirdLevel = null
 
+            Mapeamento obrigatório do setor (campo "setor"):
+' . $listaSetores . '
+
+Regras do setor:
+- Identifique o setor responsável com base no assunto tratado na ligação.
+- Escolha obrigatoriamente UM dos setores listados acima.
+- Copie o nome do setor EXATAMENTE como está escrito acima, com a mesma grafia e acentuação.
+- Nunca invente setores diferentes dos listados.
+- Se houver dúvida entre dois setores, escolha o mais específico.
+- O setor deve ser coerente com o serviço escolhido em serviceFirstLevelId.
+- Se não for possível identificar o setor, retorne "setor": null.
+
             Exemplo com resposta:
             Transcrição:
             "transferencia de paciente solicitante joao unidade londrina gleba palhano"
@@ -113,6 +127,7 @@ Regras:
             "urgencia": "Baixa"
             "solicitante": "João",
             "unidade": "Londrina Gleba Palhano",
+            "setor": "Recepção",
             "serviceFirstLevelId": "73538"
             }
 
@@ -200,18 +215,105 @@ Regras:
 
         $data = json_decode($content, true);
 
+        if (!$data) {
+            throw new \Exception("Erro ao converter JSON: " . $content);
+        }
+
         //Processamento de unidade e franqueado
         $unidade = $this->processarUnidade($data['unidade']);
         $franqueado = $this->processarFranqueado($data['unidade']);
 
         $data['unidade'] = $unidade;
         $data['solicitante'] = $franqueado;
-
-        if (!$data) {
-            throw new \Exception("Erro ao converter JSON: " . $content);
-        }
+        $data['setor'] = $this->definirSetor(
+            $data['setor'] ?? null,
+            $data['serviceFirstLevelId'] ?? null
+        );
 
         return $data;
+    }
+
+    /**
+     * Monta a lista de setores do config para injetar no prompt.
+     */
+    private function montaListaSetores(): string
+    {
+        $linhas = [];
+
+        foreach (config('movidesk.setores', []) as $setor => $descricao) {
+            $linhas[] = "- {$setor}: {$descricao}";
+        }
+
+        return implode("\n", $linhas);
+    }
+
+    /**
+     * Define o setor do ticket. O serviço escolhido tem prioridade sobre a escolha
+     * da IA, porque o mapeamento serviço -> setor é determinístico; a IA só decide
+     * quando o serviço não tem setor mapeado (ex.: fallback de Configurações DH).
+     */
+    private function definirSetor($setorIa, $serviceFirstLevelId): ?string
+    {
+        $setorIa = $this->normalizarSetor($setorIa);
+
+        if (empty($serviceFirstLevelId)) {
+            return $setorIa;
+        }
+
+        $setorServico = config('movidesk.setor_por_servico', [])[$serviceFirstLevelId] ?? null;
+
+        if ($setorServico === null) {
+            return $setorIa;
+        }
+
+        if ($setorIa !== null && $setorIa !== $setorServico) {
+            Log::warning(
+                "Setor da IA ({$setorIa}) divergiu do mapeamento do serviço {$serviceFirstLevelId} "
+                . "({$setorServico}); usando o setor do serviço."
+            );
+        }
+
+        return $setorServico;
+    }
+
+    /**
+     * Garante que o setor devolvido pela IA existe no mapeamento, retornando o
+     * valor exatamente como cadastrado no Movidesk. Fora do mapeamento vira null.
+     * A comparação ignora caixa e acentuação para não descartar "recepcao"/"CAPTACAO".
+     */
+    private function normalizarSetor($setor): ?string
+    {
+        if (!is_string($setor) || trim($setor) === '') {
+            return null;
+        }
+
+        foreach (array_keys(config('movidesk.setores', [])) as $setorValido) {
+            if ($this->chaveSetor((string) $setorValido) === $this->chaveSetor($setor)) {
+                return $setorValido;
+            }
+        }
+
+        Log::warning('Setor retornado pela IA fora do mapeamento: ' . $setor);
+
+        return null;
+    }
+
+    /**
+     * Normaliza o texto do setor para comparação: sem espaços nas pontas,
+     * minúsculo e sem acentuação.
+     */
+    private function chaveSetor(string $texto): string
+    {
+        $acentos = [
+            'á'=>'a','à'=>'a','ã'=>'a','â'=>'a','ä'=>'a',
+            'é'=>'e','è'=>'e','ê'=>'e','ë'=>'e',
+            'í'=>'i','ì'=>'i','î'=>'i','ï'=>'i',
+            'ó'=>'o','ò'=>'o','õ'=>'o','ô'=>'o','ö'=>'o',
+            'ú'=>'u','ù'=>'u','û'=>'u','ü'=>'u',
+            'ç'=>'c','ñ'=>'n',
+        ];
+
+        return strtr(mb_strtolower(trim($texto)), $acentos);
     }
 
     public function processarUnidade(string $unidade){
