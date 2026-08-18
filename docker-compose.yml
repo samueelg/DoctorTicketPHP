@@ -7,7 +7,7 @@ services:
 
     volumes:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - ./updates:/var/www/updates
+      - /var/www/updates:/var/www/updates
 
     ports:
       - "80:80"
